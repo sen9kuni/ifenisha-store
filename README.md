@@ -1,4 +1,4 @@
-# React JS - Boo-Wallet
+# Next JS - ifenisha
 <!-- <p align="center">
   <img src="./screenshoot/home.png" height="230" />
   <img src="./screenshoot/login.png" height="230" /> 
