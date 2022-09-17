@@ -1,5 +1,5 @@
 # React JS - Boo-Wallet
-<p align="center">
+<!-- <p align="center">
   <img src="./screenshoot/home.png" height="230" />
   <img src="./screenshoot/login.png" height="230" /> 
   <img src="./screenshoot/profile.png" height="230" />
@@ -8,7 +8,10 @@
   <img src="./screenshoot/myorder.png" height="230" /> 
   <img src="./screenshoot/my-product.png" height="230" />
   <img src="./screenshoot/shop.png" height="230" /> 
-</p>
+</p> -->
+![Home page](/screenshoot/home.png)
+![dashboard](/screenshoot/login.png)
+![profile page](/screenshoot/shop.png)
 
 ## About
 Web application for transfer money or payment
