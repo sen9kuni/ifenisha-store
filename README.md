@@ -3,6 +3,8 @@
   <img src="./screenshoot/home.png" height="230" />
   <img src="./screenshoot/login.png" height="230" /> 
   <img src="./screenshoot/profile.png" height="230" />
+</p>
+<p align="center">
   <img src="./screenshoot/myorder.png" height="230" /> 
   <img src="./screenshoot/my-product.png" height="230" />
   <img src="./screenshoot/shop.png" height="230" /> 
