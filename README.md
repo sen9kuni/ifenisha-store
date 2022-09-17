@@ -14,8 +14,8 @@
 ![profile page](/screenshoot/shop.png)
 
 ## About
-Web application for transfer money or payment
-this web application made using ReactJs as a framework and Bootstrap as styling
+Web application for order/buy furniture
+this web application made using Next js as a framework and Tailwindcss as styling
 ## Built With
 - [Next js](https://nextjs.org/)
 - [Tailwindcss](https://tailwindcss.com/)
