@@ -13,3 +13,32 @@
     font-size: 16px;
     line-height: 18px;
 }
+
+.card-wrap {
+    width: 293px !important;
+    height: 472px !important;
+}
+
+.image-card-wrap {
+    width: 293px !important;
+    height: 400px !important;
+}
+
+.wrap-products {
+    max-width: 920px !important;
+}
+
+.wrap-image-product {
+    width: 1160px !important;
+    height: 805px !important;
+}
+
+.image-list-product {
+    width: 240px !important;
+    height: 240px !important;
+}
+
+.wrap-review {
+    width: 840px !important;
+    height: 300px !important;
+}

@@ -18,7 +18,7 @@ export default function LandingPage(){
                         <span className="text-center text-7xl font-bold">Minimal Furniture Store</span>
                         <span className="text-center text-lg font-medium">Donec nunc nunc, gravida vitae diam vel, varius interdum erat. Quisque a nunc vel diam auctor commodo.<br />Curabitur blandit ultrices ex. Curabitur ut magna dignissim, dignissim</span>
                     </div>
-                    <div className='flex flex-col items-center'>
+                    <div className='animate-bounce flex flex-col items-center'>
                         <span className='font-semibold'>Explore now</span>
                         <TbChevronDown />
                     </div>

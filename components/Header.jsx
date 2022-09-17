@@ -51,7 +51,7 @@ export default function Header(){
     return(
         <header className='bg-slate-100 h-28 flex items-center justify-center px-5'>
             <div className='max-w-[1400px] flex-1 flex justify-between items-center'>
-                <Link href={'/'}><span className='text-3xl font-medium cursor-pointer'>ParaBot</span></Link>
+                <Link href={'/'}><span className='text-3xl font-medium cursor-pointer'>IFenisha</span></Link>
                 <div className='flex gap-10 text-gray-700'>
                     <Link href={'/'}><span className='font-semibold cursor-pointer'>HOME</span></Link>
                     <div className='flex items-center gap-1 cursor-pointer' id='page' onClick={(e)=> pagePos(e)}>

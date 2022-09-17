@@ -3,11 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   env:{
-      BACK_END_URL:'http://localhost:3335'
+      BACK_END_URL:'https://parabot-backend.vercel.app'
   },
 
   images: {
-      domains: ['res.cloudinary.com']
+      domains: ['res.cloudinary.com', 'images.unsplash.com']
   },
 
   async rewrites() {

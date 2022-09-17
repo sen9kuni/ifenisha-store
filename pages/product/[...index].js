@@ -11,6 +11,7 @@ import cookies from 'next-cookies';
 import axiosServer from '../../helpers/httpServer';
 import Router from 'next/router';
 import {BsShop} from 'react-icons/bs';
+import CardProducts from '../../components/CardProducts';
 
 export async function getServerSideProps(context){
     try{
@@ -72,17 +73,44 @@ function Product(props) {
                             </div> : null}
                         </div>
                     </div>
-                    <div className='grid grid-cols-3 gap-4'>
+                    {/* <div className='grid grid-cols-3 gap-4'>
                         {itemsCol?.map((e)=>{
                             console.log(e.product_images);
                             return(
                                 <>
                                     <CardProduct productUrl={`/product/${e.id}/details`} img={e.product_images?<Image src={e.product_images.split(',')[0]}  width={260} height={260} layout={'responsive'} alt='img-product'/>:<BsShop size={260}/>} title={e.product_name} subtitle={e.price} />
+                                    <CardProducts productUrl={`/product/${e.id}/details`} img={e.product_images?<Image src={e.product_images.split(',')[0]} objectFit='cover' layout='fill' alt='img-product' />:<BsShop size={260}/>} title={e.product_name} subtitle={e.price} />
                                 </>
                             );
                         })}
                         <br/>
                         <div className='flex gap-5 py-40'>
+                            {buttonPaginate.map(e=>{
+                                return (
+                                    <>
+                                        <button onClick={()=>setPaginet(e)} className={`${paginate == e ? 'bg-black' : 'bg-white'} border border-gray-400 py-3 px-4 rounded-lg`}>
+                                            <span className={`${paginate == e ? 'text-white' : 'text-black' } `}>{e}</span>
+                                        </button>
+                                    </>
+                                );
+                            })}
+                        </div>
+                    </div> */}
+                    <div className='flex flex-col'>
+                        <div className='grid grid-cols-3 gap-4'>
+                            {itemsCol?.map((e)=>{
+                                console.log(e.product_images);
+                                return(
+                                    <>
+                                        {/* <CardProduct productUrl={`/product/${e.id}/details`} img={e.product_images?<Image src={e.product_images.split(',')[0]}  width={260} height={260} layout={'responsive'} alt='img-product'/>:<BsShop size={260}/>} title={e.product_name} subtitle={e.price} /> */}
+                                        <CardProducts productUrl={`/product/${e.id}/details`} img={e.product_images?<Image src={e.product_images.split(',')[0]} objectFit='cover' layout='fill' alt='img-product' />:<BsShop size={260}/>} title={e.product_name} subtitle={e.price} />
+                                    </>
+                                );
+                            })}
+                        </div>
+                        
+                        <br/>
+                        <div className='flex gap-5 py-40 mx-auto'>
                             {buttonPaginate.map(e=>{
                                 return (
                                     <>
