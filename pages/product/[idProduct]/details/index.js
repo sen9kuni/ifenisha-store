@@ -44,7 +44,7 @@ const DetailProductTabContent = ({imgPath }) => {
     return (
         <>
             <div className='col-start-1 col-end-3'>
-                <Image src={imgPath} alt='imgDesc' width={450} height={450}/>
+                <Image src={imgPath} alt='imgDesc' objectFit='cover' width={450} height={450}/>
             </div>
             <div className='col-start-3 col-end-6'>
                 <span className='text-sm'>Donec accumsan auctor iaculis. Sed suscipit arcu ligula, at egestas magna molestie a. Proin ac ex maximus, ultrices justo eget, sodales orci. Aliquam egestas libero ac turpis pharetra, in vehicula lacus scelerisque. Vestibulum ut sem laoreet, feugiat tellus at, hendrerit arcu..</span>
@@ -93,7 +93,7 @@ const BreadCumbProductDetail = () => {
 function ProductDetail(props) {
     const dispatch = useDispatch();
     const product = props.dataProduct[0];
-    console.log(product);
+    // console.log(product.product_images);
     const imagesProd = typeof(product.product_images);
     const imgList = imagesProd !== 'string'?[]:[product.product_images];
     if(imagesProd !== 'string'){
@@ -101,7 +101,12 @@ function ProductDetail(props) {
             imgList.push(product.product_image[i]);
         };
     }
-    const [chooseItem, setChooseItem] = React.useState(imgList[0]);
+    // emergancy
+    const imageProduct = product.product_images
+    const finalImage = imageProduct.split(',')
+    console.log(finalImage);
+    // emergancy
+    const [chooseItem, setChooseItem] = React.useState(finalImage[0]);
     const ratingItem = [1,2,3,4,5];
     const ratingValue = 2.5;
     const rating = Math.round(ratingValue);
@@ -127,7 +132,8 @@ function ProductDetail(props) {
             <Header/>
             <section>
                 <BreadCumbProductDetail/>
-                <div className='grid grid-cols-12 mx-20'>
+
+                {/* <div className='grid grid-cols-12 mx-20'>
                     <div className='col-start-1 col-end-3'>
                         {imgList.map(e=>{
                             return(
@@ -142,7 +148,27 @@ function ProductDetail(props) {
                     <div className='col-start-3 col-end-13'>
                         <Image src={chooseItem} alt='dummy' width={1250} height={670}/>
                     </div>
+                </div> */}
+                
+                <div className='mx-20'>
+                    <div className='w-full h-[805px] grid grid-cols-5'>
+                        <div className='col-span-1 grid content-center gap-2'>
+                            {finalImage.map((e, i) => {
+                            return (
+                                <div key={e} onClick={()=>setChooseItem(e)} className='justify-self-center cursor-pointer row-span-3 image-list-product w-full h-full relative'>
+                                    <Image src={e} objectFit='cover' layout='fill' alt='test' />
+                                </div>
+                            )
+                            })}
+                        </div>
+                        <div className='col-span-4'>
+                            <div className='w-full h-full relative'>
+                            <Image src={chooseItem} objectFit='contain' layout='fill' alt='test' />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
                 <div className='mt-40 mx-20'>
                     <div className=' flex flex-col gap-5'>
                         <h1 className='text-3xl'>{product.product_name}</h1>
@@ -254,7 +280,7 @@ function ProductDetail(props) {
                         })}
                     </div>
                     <div className='grid grid-cols-5 gap-10'>
-                        {tabActive === 0 ? <DetailProductTabContent imgPath={imgList[0]}/> : <div className='flex flex-col col-start-2 col-end-5 gap-20'>
+                        {tabActive === 0 ? <DetailProductTabContent imgPath={finalImage[0]}/> : <div className='flex flex-col col-start-2 col-end-5 gap-20'>
                             <div className='flex flex-col items-center'>                                
                                 <div className='flex gap-10 items-center border-b-2 pb-16'>
                                     <div className='flex justify-start w-1/2'>
@@ -292,6 +318,24 @@ function ProductDetail(props) {
                                         </div>
                                     </div>
                                 </div>
+
+                                <div className='wrap-review mb-5'>
+                                    <div className='grid grid-cols-3 w-full h-full'>
+                                        <div className='flex justify-center items-center w-full'>
+                                        <div className='w-[150px] h-[150px] rounded-full relative overflow-hidden'>
+                                        <Image src={'https://images.unsplash.com/photo-1518577915332-c2a19f149a75?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
+                                        </div>
+                                        {/* <span>aaaa</span> */}
+                                        </div>
+                                        <div className='col-span-2'>
+                                        <div className='flex flex-col justify-center w-full h-full'>
+                                            <span className='mb-4'>“Highly customizable. Excellent design. Customer services has exceeded my expectation. They are quick to answer and even when they don&apos;t know the answer right away. They&apos;ll work with you towards a solution.”</span>
+                                            <span>35 mins ago, 15 November 2019</span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                             </div>
                             <div className='flex flex-col gap-4'>
                                 <span className='text-4xl'>Leave A Comment</span>

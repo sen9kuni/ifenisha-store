@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 import {BsShop} from 'react-icons/bs';
+import { FiPlus } from 'react-icons/fi';
 import CardProduct from '../components/CardProduct';
 
 function DummyLab() {
@@ -246,6 +247,15 @@ function DummyLab() {
           </div>
         </div>
       </div>
+    </div>
+
+    <div className='flex flex-row gap-3'>
+        <div className='cursor-pointer h-[200px] w-[200px] bg-white flex justify-center items-center border-dashed border-4 border-slate-300 text-slate-300'>
+          <label>
+            <FiPlus size={50} />
+            <input type='file' className='hidden' />
+          </label>
+        </div>
     </div>
     </>
   )
