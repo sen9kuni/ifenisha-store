@@ -41,10 +41,10 @@ export const createProduct = createAsyncThunk('product/add-product', async (requ
     }
 });
 
-export const getProductUser = createAsyncThunk('product/my-product', async () => {
+export const getProductUser = createAsyncThunk('product/my-product', async request => {
     const result = {};
     try {
-        const {data} = await http3().get('/myProducts?page=1&limit=5');
+        const {data} = await http3().get(`/myProducts?page=${request.page}&limit=5`);
         return data;
     } catch (error) {
         result.errorMsg = error.response.data.message;

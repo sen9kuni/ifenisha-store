@@ -12,10 +12,12 @@ import * as Yup from 'yup';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { TbChevronDown } from 'react-icons/tb';
-import { getProductUser, getProductDetail, updateProduct } from '../../../redux/asyncAction/product';
+import { getProductUser, getProductDetail, updateProduct, deleteProduct } from '../../../redux/asyncAction/product';
 import { useRouter } from 'next/router';
 import {BsArchive, BsPencil, BsShop, BsTrash} from 'react-icons/bs';
 import { convertMoney } from '../add-product';
+import { store } from '../../../redux/store';
+import { resetUpdateMassage } from '../../../redux/reducers/product';
 
 const editProductSchema = Yup.object().shape({
     nameProduct: Yup.string().min(5, 'Name must at least 5 characters'), 
@@ -23,22 +25,22 @@ const editProductSchema = Yup.object().shape({
     price: Yup.number().min(1000, 'minimum price is 1000')
 });
 
-const EditModalForm = ({errors, handleChange, handleSubmit, idProduct}) => {
-    const dispatch = useDispatch();
+const EditModalForm = ({errors, handleChange, handleSubmit, values, isValid}) => {
+    // const dispatch = useDispatch();
     const [loading, setLoading] = React.useState(false);
-    const products = useSelector((state)=> state.product.resultProductDetail);
-    const [moneyNumber, setMoneyNumber] = React.useState();
-    const [nameField, setNameField] = React.useState(products[0]?.product_name);
-    const [stockField, setStockField] = React.useState(products[0]?.stock);
-    const [priceField, setPriceField] = React.useState(products[0]?.price);
+    // const products = useSelector(()=> store.getState().product.resultProductDetail);
+    // const [moneyNumber, setMoneyNumber] = React.useState();
+    // const [nameField, setNameField] = React.useState(products[0].product_name);
+    // const [stockField, setStockField] = React.useState(products[0].stock);
+    // const [priceField, setPriceField] = React.useState(products[0].price);
     const [isChecked, setIsChecked] = React.useState(false);
     React.useEffect(()=>{
-        dispatch(getProductDetail(idProduct));
+        // dispatch(getProductDetail(idProduct));
         setLoading(true);
         setTimeout(()=>{
             setLoading(false);
         }, 3000);
-    }, [dispatch, idProduct]);
+    }, []);
     
     
     return (
@@ -62,8 +64,8 @@ const EditModalForm = ({errors, handleChange, handleSubmit, idProduct}) => {
                         <input
                             type='text'
                             name='nameProduct'
-                            value={nameField}
-                            onChange={(e)=>setNameField(e.currentTarget.value)}
+                            value={values.nameProduct}
+                            onChange={handleChange('nameProduct')}
                             className='shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                             placeholder='Name of goods *'
                                     
@@ -78,8 +80,8 @@ const EditModalForm = ({errors, handleChange, handleSubmit, idProduct}) => {
                             <input
                                 type='number'
                                 name='stock'
-                                value={stockField}
-                                onChange={(e)=>setStockField(e.currentTarget.value)}
+                                value={values.stock}
+                                onChange={handleChange('stock')}
                                 className='shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                                 placeholder='Unit Stock *'
                                         
@@ -97,10 +99,8 @@ const EditModalForm = ({errors, handleChange, handleSubmit, idProduct}) => {
                         <input
                             type='number'
                             name='price'
-                            value={priceField}
-                            onChange={(e) =>
-                                setPriceField((e.currentTarget.value))
-                            }
+                            value={values.price}
+                            onChange={handleChange('price')}
                             className='shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                             placeholder='Unit price *'
                         />
@@ -110,7 +110,7 @@ const EditModalForm = ({errors, handleChange, handleSubmit, idProduct}) => {
                         <span className='text-black font-semibold text-md'>
                         Set Archive ?
                         </span>
-                        <input type={'checkbox'} name='is_archive' />
+                        <input type={'checkbox'} name='is_archive' value={values.is_archive} onChange={handleChange('is_archive')} checked={values.is_archive} />
                     </div>
                     <div className='flex flex-col gap-5'>
                         <div className='flex items-center gap-5'>
@@ -121,14 +121,14 @@ const EditModalForm = ({errors, handleChange, handleSubmit, idProduct}) => {
                                 {isChecked == true? <FiCheck size={10} className='text-white'/> : null}
                             </div>
                         </div>
-                        {isChecked == true ? <input type={'number'} name='discount' className='shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                        {isChecked == true ? <input type={'number'} name='discount' value={values.discount} onChange={handleChange('discount')} className='shadow-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                             placeholder='Discount product'/> : null}
                     </div>
                     <div className='flex justify-end py-10'>
                         <button
-                            className={`${nameField || stockField || priceField ? 'bg-emerald-500' : 'bg-gray-300' } text-white active:bg-emerald-600 text-md px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
+                            className={`${isValid ? 'bg-emerald-500' : 'bg-gray-300' } text-white active:bg-emerald-600 text-md px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
                             type='submit'
-                            disabled={nameField || stockField || priceField ? false : true}
+                            disabled={isValid ? false : true}
                         >
                     Save Changes
                         </button>
@@ -142,25 +142,32 @@ const EditModalForm = ({errors, handleChange, handleSubmit, idProduct}) => {
 export const TableProduct = ({slug}) => {
     const dispatch = useDispatch();
     const router = useRouter();
+    const page = router?.query?.page;
+    // console.log(router.query);
     const products = useSelector((state)=> state.product.resultProduct);
+    const successMsg = useSelector((state)=> state.product.successUpdateMsg);
+    const errorMsg = useSelector((state)=> state.product.errorUpdateMsg);
+    const infoPage = useSelector((state)=> state.product.infoPage);
     const [idProduct, setIdProduct] = React.useState();
-    const [loading, setLoading] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const productDetail = useSelector((state)=> state.product.resultProductDetail);
     const submitEditModal = (val) => {
-        const data = {idProduct: idProduct, nameProduct: val.nameProduct == ''?productDetail[0].product_name : val.nameProduct, discount: val.discount == ''?productDetail[0].discount : val.discount, is_archive: val.is_archive, price: val.price==''?productDetail[0].price:val.price, stock: val.stock==''?productDetail[0].stock:val.stock};
+        const data = {idProduct: idProduct, ...val};
         dispatch(updateProduct(data));
-        window.location.reload();
+        // window.location.reload();
     };
     React.useEffect(()=>{
-        dispatch(getProductUser());
-        setLoading(true);
-        setTimeout(()=>{
-            setLoading(false);
-        }, 1000);
-    }, [dispatch]);
-    
-    // console.log(router.query.slug[1]);
+        if(successMsg!= null && (errorMsg == null || errorMsg === undefined)) {
+            setTimeout(() => {
+                dispatch(getProductUser({page: page}));
+                setShowModal(false);
+            }, 2000);
+        }
+    },[successMsg, errorMsg, dispatch, page]);
+
+    React.useEffect(()=>{
+        dispatch(getProductUser({page: page}));
+    }, [dispatch, page, infoPage?.currentPage]);
     return(
         <>
             <section className='mx-20'>
@@ -177,9 +184,9 @@ export const TableProduct = ({slug}) => {
                             </tr>
                         </thead>
                         <tbody className='text-black'>
-                            {slug.includes('all') ? 
+                            {slug?.includes('all') ? 
                                 <>
-                                    {Object.keys(products).length ? products.map(e=>{
+                                    {products?.length > 0 ? products.map(e=>{
                                         return(
                                             <>
                                                 <tr className='bg-white'>
@@ -200,13 +207,21 @@ export const TableProduct = ({slug}) => {
                                                         <div className='flex gap-4'>
                                                             <button
                                                                 type='button'
-                                                                onClick={() => {setShowModal(true); setIdProduct(e.id);}}
+                                                                onClick={() => {setShowModal(true); setIdProduct(e.id);dispatch(getProductDetail(e.id));}}
                                                                 className='border border-yellow-500 bg-yellow-500 text-white rounded-md px-2 py-2 my-2 transition duration-500 ease select-none hover:bg-yellow-400 focus:outline-none focus:shadow-outline'
                                                             >
                                                                 <BsPencil/>
                                                             </button>
                                                             <button
                                                                 type='button'
+                                                                onClick={()=>{
+                                                                    dispatch(deleteProduct(e.id));
+                                                                    if(successMsg!= null && (errorMsg == null || errorMsg === undefined)) {
+                                                                        setTimeout(() => {
+                                                                            dispatch(getProductUser({page: page}));
+                                                                        }, 2000);
+                                                                    }
+                                                                }}
                                                                 className='border border-red-500 bg-red-500 text-white rounded-md px-2 py-2 my-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline'
                                                             >
                                                                 <BsTrash/>
@@ -217,7 +232,11 @@ export const TableProduct = ({slug}) => {
                                                                 onClick={()=>{
                                                                     const data = {idProduct: e.id, is_archive: true};
                                                                     dispatch(updateProduct(data));
-                                                                    window.location.reload();
+                                                                    setTimeout(() => {
+                                                                        dispatch(getProductUser({page: page}));
+                                                                        setShowModal(false);
+                                                                    }, 2000);
+                                                                    // window.location.reload();
                                                                 }}
                                                                 className={`border rounded-md px-2 py-2 my-2 transition duration-500 ease select-none focus:outline-none focus:shadow-outline ${e.is_archive ? 'border-gray-300 textgray-300' :  'border-black text-black  hover:bg-black hover:text-white '}`}
                                                             >
@@ -229,8 +248,8 @@ export const TableProduct = ({slug}) => {
                                             </>
                                         );
                                     }):null} 
-                                </>    :  slug.includes('archive') ? <>
-                                    {Object.keys(products).length ? products.map(e=>{
+                                </>    :  slug?.includes('archive') ? <>
+                                    {products?.length > 0 ? products.map(e=>{
                                         return(
                                             <>
                                                 {e.is_archive ? <tr className='bg-white'>
@@ -251,13 +270,21 @@ export const TableProduct = ({slug}) => {
                                                         <div className='flex gap-4'>
                                                             <button
                                                                 type='button'
-                                                                onClick={() => {setShowModal(true); setIdProduct(e.id);}}
+                                                                onClick={() => {setShowModal(true); setIdProduct(e.id);dispatch(getProductDetail(e.id));}}
                                                                 className='border border-yellow-500 bg-yellow-500 text-white rounded-md px-2 py-2 my-2 transition duration-500 ease select-none hover:bg-yellow-400 focus:outline-none focus:shadow-outline'
                                                             >
                                                                 <BsPencil/>
                                                             </button>
                                                             <button
                                                                 type='button'
+                                                                onClick={()=>{
+                                                                    dispatch(deleteProduct(e.id));
+                                                                    if(successMsg!= null && (errorMsg == null || errorMsg === undefined)) {
+                                                                        setTimeout(() => {
+                                                                            dispatch(getProductUser({page: page}));
+                                                                        }, 2000);
+                                                                    }
+                                                                }}
                                                                 className='border border-red-500 bg-red-500 text-white rounded-md px-2 py-2 my-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline'
                                                             >
                                                                 <BsTrash/>
@@ -268,7 +295,7 @@ export const TableProduct = ({slug}) => {
                                                                 onClick={()=>{
                                                                     const data = {idProduct: e.id, is_archive: true};
                                                                     dispatch(updateProduct(data));
-                                                                    window.location.reload();
+                                                                    // window.location.reload();
                                                                 }}
                                                                 className={`border rounded-md px-2 py-2 my-2 transition duration-500 ease select-none focus:outline-none focus:shadow-outline ${e.is_archive ? 'border-gray-300 textgray-300' :  'border-black text-black  hover:bg-black hover:text-white '}`}
                                                             >
@@ -280,8 +307,8 @@ export const TableProduct = ({slug}) => {
                                             </>
                                         );
                                     }):null} 
-                                </> : slug.includes('sold-out') ? <>
-                                    {Object.keys(products).length ? products.map(e=>{
+                                </> : slug?.includes('sold-out') ? <>
+                                    {products?.length > 0 ? products.map(e=>{
                                         return(
                                             <>
                                                 {e.stock < 1 ? <tr className='bg-white'>
@@ -302,13 +329,22 @@ export const TableProduct = ({slug}) => {
                                                         <div className='flex gap-4'>
                                                             <button
                                                                 type='button'
-                                                                onClick={() => {setShowModal(true); setIdProduct(e.id);}}
+                                                                onClick={() => {setShowModal(true); setIdProduct(e.id);dispatch(getProductDetail(e.id));}}
                                                                 className='border border-yellow-500 bg-yellow-500 text-white rounded-md px-2 py-2 my-2 transition duration-500 ease select-none hover:bg-yellow-400 focus:outline-none focus:shadow-outline'
                                                             >
                                                                 <BsPencil/>
                                                             </button>
                                                             <button
                                                                 type='button'
+                                                                onClick={()=>{
+                                                                    dispatch(deleteProduct(e.id));
+                                                                    if(successMsg!= null && (errorMsg == null || errorMsg === undefined)) {
+                                                                        setTimeout(() => {
+                                                                            dispatch(getProductUser({page: page}));
+                                                                            dispatch(resetUpdateMassage());
+                                                                        }, 2000);
+                                                                    }
+                                                                }}
                                                                 className='border border-red-500 bg-red-500 text-white rounded-md px-2 py-2 my-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline'
                                                             >
                                                                 <BsTrash/>
@@ -319,7 +355,11 @@ export const TableProduct = ({slug}) => {
                                                                 onClick={()=>{
                                                                     const data = {idProduct: e.id, is_archive: true};
                                                                     dispatch(updateProduct(data));
-                                                                    window.location.reload();
+                                                                    setTimeout(() => {
+                                                                        dispatch(getProductUser({page: page}));
+                                                                        setShowModal(false);
+                                                                    }, 2000);
+                                                                    // window.location.reload();
                                                                 }}
                                                                 className={`border rounded-md px-2 py-2 my-2 transition duration-500 ease select-none focus:outline-none focus:shadow-outline ${e.is_archive ? 'border-gray-300 textgray-300' :  'border-black text-black  hover:bg-black hover:text-white '}`}
                                                             >
@@ -337,13 +377,13 @@ export const TableProduct = ({slug}) => {
                             }
                         </tbody>
                     </table>
-                    {showModal ? (
+                    {showModal && productDetail.length > 0 ? (
                         <>
                             <ModalProduct title={'Edit my product'} onHide={()=>setShowModal(false)} content={
                                 (
                                     <>
-                                        <Formik onSubmit={submitEditModal} initialValues={{nameProduct: '', stock: '', price: '', is_archive: false, discount: 0}} validationSchema={editProductSchema}>
-                                            {(props)=> <EditModalForm {...props} idProduct={idProduct}/>}
+                                        <Formik onSubmit={submitEditModal} initialValues={{nameProduct: productDetail[0]?.product_name, stock: productDetail[0]?.stock??0, price: productDetail[0]?.price??0, is_archive: productDetail[0]?.is_archive, discount: productDetail[0]?.discount}} validationSchema={editProductSchema}>
+                                            {(props)=> <EditModalForm {...props}/>}
                                         </Formik>
                                     </>
                                 )
@@ -365,8 +405,7 @@ function MyProduct() {
     const indexTab = 1;
     const [order, setOrder] = React.useState({active: false, left: 0, top: 0});
     const [product, setProduct] = React.useState({active: false, left: 0, top: 0});
-    const slug = router.query.slug.join();
-    console.log(slug);
+    const slug = router.query.slug?.join();
     const menuOrder = (e) => {
         setOrder({active: !order.active, left: e.pageX - 60, top: e.pageY + 30});
     };
