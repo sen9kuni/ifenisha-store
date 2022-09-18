@@ -45,7 +45,7 @@ function Product(props) {
     const [isActive, setIsActive] = React.useState('');
     const [sorting,setSorting] = React.useState('asc');
     const buttonPaginate = [];
-    for( let i = 1; i <= props.dataPage?.totalPage; i++){
+    for( let i = 0; i <= props.dataPage?.totalPage; i++){
         buttonPaginate.push(i);
     };
     const [paginate, setPaginet] = React.useState(buttonPaginate[1]);
@@ -112,13 +112,15 @@ function Product(props) {
                         <br/>
                         <div className='flex gap-5 py-40 mx-auto'>
                             {buttonPaginate.map(e=>{
-                                return (
-                                    <>
-                                        <button onClick={()=>setPaginet(e)} className={`${paginate == e ? 'bg-black' : 'bg-white'} border border-gray-400 py-3 px-4 rounded-lg`}>
-                                            <span className={`${paginate == e ? 'text-white' : 'text-black' } `}>{e}</span>
-                                        </button>
-                                    </>
-                                );
+                                if(e!==0){
+                                    return (
+                                        <>
+                                            <button onClick={()=>setPaginet(e)} className={`${paginate == e ? 'bg-black' : 'bg-white'} border border-gray-400 py-3 px-4 rounded-lg`}>
+                                                <span className={`${paginate == e ? 'text-white' : 'text-black' } `}>{e}</span>
+                                            </button>
+                                        </>
+                                    );
+                                }
                             })}
                         </div>
                     </div>
