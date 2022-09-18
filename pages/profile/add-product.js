@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 import Link from 'next/link';
 import Head from 'next/head';
 import { useSelector, useDispatch } from 'react-redux';
-import { allCategory, createProduct } from '../../redux/asyncAction/product';
+import { allCategory, createProduct, getProductUser } from '../../redux/asyncAction/product';
 import { useRouter } from 'next/router';
 import { TbChevronDown } from 'react-icons/tb';
 
@@ -123,7 +123,7 @@ const ProductForm = ({errors, handleSubmit, handleChange, image, colorComponent}
                             
                             <select name='categoryId' className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
                                 <option selected>Choose One Category</option>
-                                {Object.keys(categories).length && categories?.map((e) => {
+                                {categories?.length > 0 && categories?.map((e) => {
                                     return(
                                         <>
                                             <option key={e.id} value={`${e.id}`}>{e.category_name}</option>
@@ -174,7 +174,6 @@ function AddNewProduct() {
     const role = useSelector((state) => state.auth.role);
     const [imgFile, setImgFile] = React.useState();
     
-    const [moneyNumber, setMoneyNumber] = React.useState([]);
     const [imgArr, setImgArr] = React.useState([]);
     
     const menuTab = ['Profile', 'My Product', 'Selling Product', 'My Order'];
@@ -213,11 +212,16 @@ function AddNewProduct() {
         }
         const data = {...val, images: arrImg, color: colorProduct, condition: condition};
         dispatch(createProduct(data));
-        router.push('/profile/my-product');
+        dispatch(getProductUser({page: 1}));
+        router.push('/profile/my-product/profile/my-product/all?page=1&limit=5');
         // console.log(imgFile);
     };
     const deleteImg = (i)=>{
         setImgArr((state)=>state.filter((item, index)=>index !== i));
+        
+        const delImg = arrImg.filter((item, index)=>index !== i)
+        arrImg = delImg;
+        
     };
 
     const [order, setOrder] = React.useState({active: false, left: 0, top: 0});
@@ -232,6 +236,7 @@ function AddNewProduct() {
     React.useEffect(()=>{
         setImgArr(arrImg);
     }, []);
+    console.log(imgArr.length);
     return (
         <>  
             <Head>
@@ -247,7 +252,7 @@ function AddNewProduct() {
                     {menuTab.map((e,i)=>{
                         return (
                             <>
-                                <div className='flex gap-5'>
+                                <div className='flex gap-5' key={i}>
                                     <Link href={linkTo[i]}>
                                         <a>
                                             <div className={`${i === indexTab ? 'border-b-4' : ''} border-black`}>
@@ -313,10 +318,10 @@ function AddNewProduct() {
                 <Formik onSubmit={onSubmitProduct} validationSchema={productSchema} initialValues={{nameProduct: '', descProduct: '', priceProduct: '', stockProduct: '', newProduct: false, secondProduct: false, imgProduct: null, brandProduct: '', categoryId: '', skuNumber: ''}}>
                     {(props)=><ProductForm {...props} image={
                         <div className='flex gap-3'>
-                            {imgArr.map((e,i)=>{
+                            {arrImg.map((e,i)=>{
                                 return(
                                     <>
-                                        <div className='w-1/4 h-40 m-2 flex flex-col justify-center items-start relative'>
+                                        <div className='w-1/4 h-40 m-2 flex flex-col justify-center items-start relative' key={i}>
                                             <Image
                                                 src={`${URL.createObjectURL(e)}`}
                                                 alt='img'
@@ -332,36 +337,41 @@ function AddNewProduct() {
                                     </>
                                 );
                             })}
-                            <div className='flex flex-col gap-4'>
-                                <div className='flex w-full h-40 items-center justify-center bg-grey-lighter m-2 '>
-                                    <label className={`w-full h-full flex flex-col items-center justify-center bg-white text-blue rounded-lg tracking-wide uppercase outline-gray-200 outline-dashed outline-2 outline-offset-0 ${arrImg.length > 2 ? 'pointer-events-none' : 'cursor-pointer'}  hover:bg-gray-100`}>
-                                        <FiPlus
-                                            size={60}
-                                            className='text-gray-300 '
-                                        />
-                                        <span className='mt-2 text-base leading-normal text-gray-300'>
-                                        Add more image
-                                        </span>
-                                        <input
-                                            type='file'
-                                            name='imgProduct'
-                                            disabled={arrImg.length > 2 ? true : false}
-                                            onChange={(e) =>
-                                            { 
-                                                if(e.target.files[0].type.split('/')[1] === 'png' || e.target.files[0].type.split('/')[1] === 'jpg' || e.target.files[0].type.split('/')[1] === 'jpeg'){
-                                                    setImgFile(e.target.files[0]);
-                                                    arrImg.push(e.target.files[0]);
-                                                } else {
-                                                    window.alert('You can uploud only image file');
-                                                }
-                                            }
-                                            }
-                                            className='hidden'
-                                        />
-                                    </label>
-                                </div>
-                                {arrImg.length > 2 ? <span className='text-red-700'>Maximum uploud images</span> : null}
-                            </div>
+                            {arrImg.length > 2 ? null : (
+                                <>
+                                    <div className='flex flex-col gap-4'>
+                                        <div className='flex w-full h-40 items-center justify-center bg-grey-lighter m-2 '>
+                                            <label className={'w-full h-full flex flex-col items-center justify-center bg-white text-blue rounded-lg tracking-wide uppercase outline-gray-200 outline-dashed outline-2 outline-offset-0 cursor-pointer  hover:bg-gray-100'}>
+                                                <FiPlus
+                                                    size={60}
+                                                    className='text-gray-300 '
+                                                />
+                                                <span className='mt-2 text-base leading-normal text-gray-300'>
+                                                Add more image
+                                                </span>
+                                                <input
+                                                    type='file'
+                                                    name='imgProduct'
+                                                    onChange={(e) =>
+                                                    { 
+                                                        if(e?.target?.files[0]?.type !== undefined) {
+                                                            if(e?.target?.files[0]?.type?.split('/')[1] === 'png' || e?.target?.files[0]?.type.split('/')[1] === 'jpg' || e?.target?.files[0]?.type.split('/')[1] === 'jpeg'){
+                                                                setImgFile(e.target?.files[0]);
+                                                                arrImg.push(e.target?.files[0]);
+                                                            } else {
+                                                                window.alert('You can uploud only image file');
+                                                            }
+                                                        }
+                                                    }
+                                                    }
+                                                    className='hidden'
+                                                />
+                                            </label>
+                                        </div>
+                                        {imgArr.length > 2 ? <span className='text-red-700'>Maximum uploud images</span> : null}
+                                    </div>
+                                </>
+                            )}
                         </div>
                     } 
                     colorComponent={

@@ -2,17 +2,25 @@ import { createSlice } from '@reduxjs/toolkit';
 import { allCategory, createProduct, deleteProduct, getProductDetail, getProductUser, updateProduct } from '../asyncAction/product';
 
 const initialState = {
-    resultCategories: {},
+    resultCategories: [],
     errorMsg: null,
     successMsg: null,
-    resultProduct: {},
-    resultProductDetail: {}
+    errorUpdateMsg: null,
+    successUpdateMsg: null,
+    resultProduct: [],
+    resultProductDetail: {},
+    infoPage: {}
 };
 
 export const product = createSlice({
     name: 'product',
     initialState,
-    reducers: {},
+    reducers: {
+        resetUpdateMassage: (state) => {
+            state.errorUpdateMsg = null;
+            state.successUpdateMsg = null;
+        }
+    },
     extraReducers: (build) => {
         build.addCase(allCategory.pending, (state)=> {
             state.errorMsg = null;
@@ -40,8 +48,10 @@ export const product = createSlice({
             state.resultProduct = action.payload.result;
             state.errorMsg = action.payload.errorMsg;
             state.successMsg = action.payload.message;
+            state.infoPage = action.payload.pageInfo;
         }),
         build.addCase(getProductDetail.pending, (state) => {
+            state.resultProductDetail = {};
             state.errorMsg = null;
             state.successMsg = null;
         }),
@@ -49,27 +59,27 @@ export const product = createSlice({
             state.resultProductDetail = action.payload.result;
             state.successMsg = action.payload.message;
             state.errorMsg = action.payload.errorMsg;
+            state.errorUpdateMsg = null;
+            state.successUpdateMsg = null;
         }),
         build.addCase(updateProduct.pending, (state) => {
-            state.errorMsg = null;
-            state.successMsg = null;
+            state.errorUpdateMsg = null;
+            state.successUpdateMsg = null;
         }),
         build.addCase(updateProduct.fulfilled, (state, action) => {
-            state.errorMsg = action.payload.errorMsg;
-            state.successMsg = action.payload.message;
-            state.resultProduct = action.payload.result;
+            state.errorUpdateMsg = action.payload.errorMsg;
+            state.successUpdateMsg = action.payload.message;
         }),
         build.addCase(deleteProduct.pending, (state) => {
-            state.errorMsg = null;
-            state.successMsg = null;
+            state.errorUpdateMsg = null;
+            state.successUpdateMsg = null;
         }),
         build.addCase(deleteProduct.fulfilled, (state, action) => {
-            state.errorMsg = action.payload.errorMsg;
-            state.successMsg = action.payload.message;
-            state.resultProduct = action.payload.result;
+            state.errorUpdateMsg = action.payload.errorMsg;
+            state.successUpdateMsg = action.payload.successMsg;
         });
     }
 });
-
+export const {resetUpdateMassage} = product.actions
 export {allCategory, createProduct, getProductUser, getProductDetail, updateProduct, deleteProduct};
 export default product.reducer;
