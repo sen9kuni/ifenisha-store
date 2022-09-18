@@ -8,6 +8,15 @@ import Banner from '../../components/Banner';
 import { useSelector } from 'react-redux';
 import {FiEdit3, FiLogOut} from 'react-icons/fi';
 import { TbChevronDown } from 'react-icons/tb';
+import ModalChangeName from '../../components/ModalEditProfile/ModalChangeName';
+import * as Yup from 'yup';
+
+const nameSechema = Yup.object().shape({
+    full_name: Yup.string().min(3, 'full name must be at least 3 characters').required('full name is a required field').optional(),
+    email: Yup.string().email('Invalid email address format').required().optional(),
+    store_name: Yup.string().min(5).required().optional(),
+    store_desc: Yup.string().min(10).required().optional()
+});
 
 function Seller() {
     const role = useSelector((state) => state.auth.role);
@@ -22,6 +31,43 @@ function Seller() {
     const menuProduct = (e) => {
         setProduct({active: !product.active, left: e.pageX - 60, top: e.pageY + 30});
     };
+    const [showModal, setShowModal] = React.useState(false)
+    const [showIndex, setShowIndex] = React.useState(null)
+    const [showModalEmail, setShowModalEmail] = React.useState(false)
+    const handleClose = type => {
+        switch (type) {
+            case 'full_name':
+                setShowModal(false)
+                break;
+            case 'email':
+                setShowModalEmail(false)
+                break;
+            default:
+                break;
+        }
+        setShowModal(false)
+    }
+    const changeName = value => {
+        console.log(value);
+        console.log(typeof showIndex);
+        switch (showIndex) {
+            case 0:
+                console.log('fullname');
+                break;
+            case 1:
+                console.log('gender')
+                break;
+            case 2:
+                console.log('email')
+                break;
+            case 3:
+                console.log('store name')
+                break;
+            default:
+                console.log('store desc')
+                break;
+        }
+    }
     return (
         <>
             <Header />
@@ -110,8 +156,10 @@ function Seller() {
                     </div>
                     <div className='flex flex-col justify-center'>
                         <div className='flex items-center'>
-                            <Link href='#'><a>Syifa</a></Link>
-                            <FiEdit3 />
+                            <span>Syifa</span>
+                            <button onClick={() => {setShowModal(true); setShowIndex(0);}} className='flex flex-row items-center gap-1'>
+                                <FiEdit3 />
+                            </button>
                         </div>
                         <div>
                             <p className=''>as seller</p>
@@ -125,40 +173,52 @@ function Seller() {
                             <div className='font-semibold'>Gender</div>
                             <div className='text-base'>Female</div>
                         </div>
-                        <div className='flex flex-row items-center gap-1'>
+                        {/* <div className='flex flex-row items-center gap-1'>
                             <Link href='#'><a className='font-semibold'>Edit</a></Link>
                             <FiEdit3 />
-                        </div>
+                        </div> */}
+                        <button onClick={() => {setShowModal(true); setShowIndex(1);}} className='flex flex-row items-center gap-1'>
+                            {/* <Link href='#'><a className='font-semibold'>Edit</a></Link> */}
+                            <span className='font-semibold'>Edit</span>
+                            <FiEdit3 />
+                        </button>
                     </div>
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='font-semibold'>Your Email</div>
                             <div className=''>syifa@gamil.com</div>
                         </div>
-                        <div className='flex flex-row items-center gap-1'>
+                        {/* <div className='flex flex-row items-center gap-1'>
                             <Link href='#'><a className='font-semibold'>Edit</a></Link>
                             <FiEdit3 />
-                        </div>
+                        </div> */}
+                        <button onClick={() => {setShowModal(true); setShowIndex(2);}} className='flex flex-row items-center gap-1'>
+                            {/* <Link href='#'><a className='font-semibold'>Edit</a></Link> */}
+                            <span className='font-semibold'>Edit</span>
+                            <FiEdit3 />
+                        </button>
                     </div>
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='font-semibold'>Store Name</div>
                             <div className=''>Apple Store</div>
                         </div>
-                        <div className='flex flex-row items-center gap-1'>
-                            <Link href='#'><a className='font-semibold'>Edit</a></Link>
+                        <button onClick={() => {setShowModal(true); setShowIndex(3);}} className='flex flex-row items-center gap-1'>
+                            {/* <Link href='#'><a className='font-semibold'>Edit</a></Link> */}
+                            <span className='font-semibold'>Edit</span>
                             <FiEdit3 />
-                        </div>
+                        </button>
                     </div>
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='font-semibold'>Store Description</div>
                             <div className=''>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
                         </div>
-                        <div className='flex flex-row items-center gap-1'>
-                            <Link href='#'><a className='font-semibold'>Edit</a></Link>
+                        <button onClick={() => {setShowModal(true); setShowIndex(4);}} className='flex flex-row items-center gap-1'>
+                            {/* <Link href='#'><a className='font-semibold'>Edit</a></Link> */}
+                            <span className='font-semibold'>Edit</span>
                             <FiEdit3 />
-                        </div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -168,7 +228,9 @@ function Seller() {
                     <span>Logout</span>
                 </button>
             </div>
-
+            {/* <ModalChangeName visible={showModal} onClose={handleClose} />
+            <button onClick={() => setShowModal(true)}>test</button> */}
+            <ModalChangeName typeInput={showIndex === 2 ? 'email' : 'text'} visible={showModal} onClose={handleClose} title={showIndex === 0 ? 'Full Name' : showIndex === 1 ? 'Gender' : showIndex === 2 ? 'Email' : showIndex === 3 ? 'Store Name' : 'Store Description'} value={showIndex === 0 ? {full_name: ''} : showIndex === 1 ? {gender: ''} : showIndex === 2 ? {email: ''} : showIndex === 3 ? {store_name: ''} : {store_desc: ''}} valueName={showIndex === 0 ? 'full_name' : showIndex === 1 ? 'gender' : showIndex === 2 ? 'email' : showIndex === 3 ? 'store_name' : 'store_desc'} onHandleChange={changeName} validateScame={nameSechema} />
             <Footer />
         </>
         

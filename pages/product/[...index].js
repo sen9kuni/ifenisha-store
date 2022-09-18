@@ -97,7 +97,7 @@ function Product(props) {
                         </div>
                     </div> */}
                     <div className='flex flex-col'>
-                        <div className='grid grid-cols-3 gap-4'>
+                        <div className='wrap-products grid grid-cols-3 gap-7'>
                             {itemsCol?.map((e)=>{
                                 console.log(e.product_images);
                                 return(
