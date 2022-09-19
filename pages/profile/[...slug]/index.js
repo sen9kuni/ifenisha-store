@@ -26,16 +26,9 @@ const editProductSchema = Yup.object().shape({
 });
 
 const EditModalForm = ({errors, handleChange, handleSubmit, values, isValid}) => {
-    // const dispatch = useDispatch();
     const [loading, setLoading] = React.useState(false);
-    // const products = useSelector(()=> store.getState().product.resultProductDetail);
-    // const [moneyNumber, setMoneyNumber] = React.useState();
-    // const [nameField, setNameField] = React.useState(products[0].product_name);
-    // const [stockField, setStockField] = React.useState(products[0].stock);
-    // const [priceField, setPriceField] = React.useState(products[0].price);
     const [isChecked, setIsChecked] = React.useState(false);
     React.useEffect(()=>{
-        // dispatch(getProductDetail(idProduct));
         setLoading(true);
         setTimeout(()=>{
             setLoading(false);
@@ -143,7 +136,6 @@ export const TableProduct = ({slug}) => {
     const dispatch = useDispatch();
     const router = useRouter();
     const page = router?.query?.page;
-    // console.log(router.query);
     const products = useSelector((state)=> state.product.resultProduct);
     const successMsg = useSelector((state)=> state.product.successUpdateMsg);
     const errorMsg = useSelector((state)=> state.product.errorUpdateMsg);
@@ -151,10 +143,19 @@ export const TableProduct = ({slug}) => {
     const [idProduct, setIdProduct] = React.useState();
     const [showModal, setShowModal] = React.useState(false);
     const productDetail = useSelector((state)=> state.product.resultProductDetail);
+    const onPrevPageData = () => {
+        if(infoPage?.prevPage !=  null) {
+            router.push(`/profile/my-product/${router?.query?.slug[1]}?page=${infoPage?.prevPage}&limit=5`)
+        }
+    };
+    const onNextPageData = () => {
+        if(infoPage?.nextPage !=  null) {
+            router.push(`/profile/my-product/${router?.query?.slug[1]}?page=${infoPage?.nextPage}&limit=5`)
+        }
+    };
     const submitEditModal = (val) => {
         const data = {idProduct: idProduct, ...val};
         dispatch(updateProduct(data));
-        // window.location.reload();
     };
     React.useEffect(()=>{
         if(successMsg!= null && (errorMsg == null || errorMsg === undefined)) {
@@ -167,7 +168,7 @@ export const TableProduct = ({slug}) => {
 
     React.useEffect(()=>{
         dispatch(getProductUser({page: page}));
-    }, [dispatch, page, infoPage?.currentPage]);
+    }, [dispatch, page]);
     return(
         <>
             <section className='mx-20'>
@@ -189,7 +190,7 @@ export const TableProduct = ({slug}) => {
                                     {products?.length > 0 ? products.map(e=>{
                                         return(
                                             <>
-                                                <tr className='bg-white'>
+                                                <tr className='bg-white' key={e.id}>
                                                     <td className='w-1/3 pt-8'>
                                                         <div className='flex flex-col md:flex-row items-center gap-10'>
                                                             {e.product_images == '' ? <BsShop size={130}/> :  <Image src={e.product_images.split(',')[0]} alt='img-dummy' width={130} height={150} layout='fixed' objectFit='cover'/>}
@@ -252,7 +253,7 @@ export const TableProduct = ({slug}) => {
                                     {products?.length > 0 ? products.map(e=>{
                                         return(
                                             <>
-                                                {e.is_archive ? <tr className='bg-white'>
+                                                {e.is_archive ? <tr className='bg-white' key={e.id}>
                                                     <td className='w-1/3 pt-8'>
                                                         <div className='flex flex-col md:flex-row items-center gap-10'>
                                                             {e.product_images == '' ? <BsShop size={130}/> :  <Image src={e.product_images.split(',')[0]} alt='img-dummy' width={130} height={150} layout='fixed' objectFit='cover'/>}
@@ -311,7 +312,7 @@ export const TableProduct = ({slug}) => {
                                     {products?.length > 0 ? products.map(e=>{
                                         return(
                                             <>
-                                                {e.stock < 1 ? <tr className='bg-white'>
+                                                {e.stock < 1 ? <tr className='bg-white' key={e.id}>
                                                     <td className='w-1/3 pt-8'>
                                                         <div className='flex flex-col md:flex-row items-center gap-10'>
                                                             {e.product_images == '' ? <BsShop size={130}/> :  <Image src={e.product_images.split(',')[0]} alt='img-dummy' width={130} height={150} layout='fixed' objectFit='cover'/>}
@@ -377,6 +378,11 @@ export const TableProduct = ({slug}) => {
                             }
                         </tbody>
                     </table>
+                    <div className='flex flex-row items-center justify-center gap-5 mt-20'>
+                        <button disabled={infoPage?.prevPage === null ? true : false} onClick={onPrevPageData} className={`flex px-5 py-3 border-2 font-semibold ${infoPage?.prevPage === null ? 'border-gray-400 text-gray-500' : 'border-gray-700 text-gray-800 cursor-pointer hover:border-gray-500 hover:text-gray-600'}`}>prev</button>
+                        <span className='text-lg font-semibold'>{infoPage?.currentPage}</span>
+                        <button disabled={infoPage?.nextPage === null ? true : false} onClick={onNextPageData} className={`flex px-5 py-3 border-2 font-semibold ${infoPage?.nextPage === null ? 'border-gray-400 text-gray-500' : 'border-gray-700 text-gray-800 cursor-pointer hover:border-gray-500 hover:text-gray-600'}`}>next</button>
+                    </div>
                     {showModal && productDetail.length > 0 ? (
                         <>
                             <ModalProduct title={'Edit my product'} onHide={()=>setShowModal(false)} content={
@@ -441,8 +447,8 @@ function MyProduct() {
                         <div className='flex justify-evenly my-20'>
                             {menuTab.map((e,i)=>{
                                 return (
-                                    <>
-                                        <div className='flex gap-5'>
+                                    <div key={i}>
+                                        <div className='flex gap-5' key={i}>
                                             <Link href={linkTo[i]}>
                                                 <a>
                                                     <div className={`${i === indexTab ? 'border-b-4' : ''} border-black`}>
@@ -499,7 +505,7 @@ function MyProduct() {
                                         </div>
                                     </div>
                                         }
-                                    </>
+                                    </div>
                                 );
                             })}
                         </div>
