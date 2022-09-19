@@ -7,13 +7,20 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Banner from '../../components/Banner';
 import {FiEdit3, FiLogOut} from 'react-icons/fi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProfileCustomer } from '../../redux/asyncAction/customer';
 
 function Customer() {
+    const dispatch = useDispatch();
+    const token = useSelector(state=>state.auth.token);
     const role = useSelector((state) => state.auth.role);
-    const menuTab = ['Profile', 'My Product', 'Selling Product', 'My Order'];
+    const profile = useSelector(state => state.customer?.data)
+    const menuTab = ['Profile'];
     const linkTo = [`/profile/${role==='seller'?'seller':'customer'}`, '/profile/my-product', '/profile/add-product', '/order'];
     const indexTab = 0;
+    React.useEffect(()=>{
+        dispatch(getProfileCustomer(token))
+    },[])
     return (
         <>
             <Header />
@@ -51,7 +58,7 @@ function Customer() {
                     </div>
                     <div className='flex flex-col justify-center'>
                         <div className='flex items-center'>
-                            <Link href='#'><a>Syifa</a></Link>
+                            <Link href='#'><a>{profile.full_name}</a></Link>
                             <FiEdit3 />
                         </div>
                         <div>
@@ -64,7 +71,7 @@ function Customer() {
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='font-semibold'>Gender</div>
-                            <div className='text-base'>Female</div>
+                            <div className='text-base'>{profile.gender}</div>
                         </div>
                         <div className='flex flex-row items-center gap-1'>
                             <Link href='#'><a className='font-semibold'>Edit</a></Link>
@@ -74,7 +81,7 @@ function Customer() {
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='font-semibold'>Your Email</div>
-                            <div className=''>syifa@gamil.com</div>
+                            <div className=''>{profile.email}</div>
                         </div>
                         <div className='flex flex-row items-center gap-1'>
                             <Link href='#'><a className='font-semibold'>Edit</a></Link>
@@ -83,8 +90,8 @@ function Customer() {
                     </div>
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
-                            <div className='font-semibold'>Description</div>
-                            <div className=''>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                            <div className='font-semibold'>Bio</div>
+                            <div className=''>{profile.store_desc}</div>
                         </div>
                         <div className='flex flex-row items-center gap-1'>
                             <Link href='#'><a className='font-semibold'>Edit</a></Link>
