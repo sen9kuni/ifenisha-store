@@ -9,6 +9,7 @@ import product from './product';
 import notification from './notification';
 import counter from './counter';
 import cart from './cart';
+import customer from './customer';
 
 
 const authPersistConfig = {
@@ -19,8 +20,9 @@ const authPersistConfig = {
 const persistedAuthReducer = persistReducer(authPersistConfig,auth);
 
 const reducer = combineReducers({
-    counter:counter,
     auth:persistedAuthReducer,
+    counter:counter,
+    customer,
     chats,
     notification,
     getCheckouts,
