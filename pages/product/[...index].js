@@ -18,9 +18,11 @@ export async function getServerSideProps(context){
         const search = !context.query?.search?'':context.query.search;
         const page = !context.query?.page? 1 :context.query.page;
         const sortBy = !context.query?.sortBy? 'created_at': context.query.sortBy;
-        const sort = !context.query?.sort? 'asc': 'desc';
+        const sort = !context.query?.sort? '': context.query.sort;
+        // const sort = !context.query?.sort? 'asc': context.query.sort;
+        // const sort = context.query.sort;
         const product = await axiosServer.get(
-            `/products?search=${search}&sortBy=${sortBy}&sort=${sort}&page=${page}`
+            `/products?search=${search}&sortBy=${sortBy}&sort=${sort}&page=${page ?? 1}`
         );
         return{
             props:{
@@ -69,7 +71,7 @@ function Product(props) {
                             {showDropdown?<div className='bg-black w-40 flex flex-col py-10 px-5 gap-7 mt-10 absolute z-10 rounded-lg'>
                                 <span onClick={()=>{setIsActive('created_at'); setShowDropdown(false);}} className={`${isActive == 1 ? 'text-white' : 'text-gray-400' } hover:text-white cursor-pointer`}>Latest Product</span>
                                 <span onClick={()=>{setIsActive('price'); setSorting('decs');setShowDropdown(false);}} className={`${isActive == 2 ? 'text-white' : 'text-gray-400' } hover:text-white cursor-pointer`}>More Expensive</span>
-                                <span onClick={()=>{setIsActive('price'); setSorting('acs');setShowDropdown(false);}} className={`${isActive == 3 ? 'text-white' : 'text-gray-400' } hover:text-white cursor-pointer`}>More Cheap</span>
+                                <span onClick={()=>{setIsActive('price'); setSorting('asc');setShowDropdown(false);}} className={`${isActive == 3 ? 'text-white' : 'text-gray-400' } hover:text-white cursor-pointer`}>More Cheap</span>
                             </div> : null}
                         </div>
                     </div>

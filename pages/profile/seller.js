@@ -49,7 +49,6 @@ function Seller() {
     }
     const changeName = value => {
         console.log(value);
-        console.log(typeof showIndex);
         switch (showIndex) {
             case 0:
                 console.log('fullname');
