@@ -236,7 +236,6 @@ function AddNewProduct() {
     React.useEffect(()=>{
         setImgArr(arrImg);
     }, []);
-    console.log(imgArr.length);
     return (
         <>  
             <Head>
@@ -251,8 +250,8 @@ function AddNewProduct() {
                 <div className='flex justify-evenly my-20'>
                     {menuTab.map((e,i)=>{
                         return (
-                            <>
-                                <div className='flex gap-5' key={i}>
+                            <div key={i}>
+                                <div className='flex gap-5'>
                                     <Link href={linkTo[i]}>
                                         <a>
                                             <div className={`${i === indexTab ? 'border-b-4' : ''} border-black`}>
@@ -309,7 +308,7 @@ function AddNewProduct() {
                                         </div>
                                     </div>
                                 }
-                            </>
+                            </div>
                         );
                     })}
                 </div>
