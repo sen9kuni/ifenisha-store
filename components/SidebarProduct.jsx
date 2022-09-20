@@ -2,12 +2,22 @@ import React from 'react';
 import Image from 'next/image';
 import ImgSideBar from '../public/images/img-sidebar.png';
 import { FiCheck } from 'react-icons/fi';
+import { productCategory } from '../redux/asyncAction/product';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 function SidebarProduct() {
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const productCategoryList = useSelector((state) => state.product.productCategory)
     
     const [minPrice, setMinPrice] = React.useState(0);
     const [maxPrice, setMaxPrice] = React.useState(200);
     const [isChecked, setIsChecked] = React.useState(0);
+    React.useEffect(()=>{
+        dispatch(productCategory())
+    }, [dispatch]);
+
     return (
         <>
             <aside className='col-start-1 col-end-4'>
@@ -15,7 +25,7 @@ function SidebarProduct() {
                     <div>
                         <span className='text-3xl font-semibold'>Categories</span>
                         <div className='flex flex-col gap-6 mt-7'>
-                            <div className='flex justify-between cursor-pointer hover:text-gray-500'>
+                            {/* <div className='flex justify-between cursor-pointer hover:text-gray-500'>
                                 <span>Tables</span>
                                 <span>5</span>
                             </div>
@@ -42,7 +52,21 @@ function SidebarProduct() {
                             <div className='flex justify-between cursor-pointer hover:text-gray-500'>
                                 <span>Bookshelf</span>
                                 <span>5</span>
+                            </div> */}
+                            <div onClick={() => router.push('/product/products?page=1&sort=&sortBy=')} className='flex justify-between cursor-pointer hover:text-gray-500'>
+                                <span>all</span>
+                                {/* <span>5</span> */}
                             </div>
+                            {productCategoryList?.map((e) => {
+                                return (
+                                    <>
+                                        <div onClick={() => router.push(`/product/products?page=1&sort=&sortBy=&category=${e.category_name}`)} key={e.category_name} className='flex justify-between cursor-pointer hover:text-gray-500'>
+                                            <span>{e.category_name}</span>
+                                            <span>{e.count}</span>
+                                        </div>
+                                    </>
+                                )
+                            })}
                         </div>
                     </div>
                     <div>

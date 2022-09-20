@@ -19,10 +19,14 @@ export async function getServerSideProps(context){
         const page = !context.query?.page? 1 :context.query.page;
         const sortBy = !context.query?.sortBy? 'created_at': context.query.sortBy;
         const sort = !context.query?.sort? '': context.query.sort;
+        const category = !context.query?.category? '': context.query.category;
+        const color = !context.query?.color? '': context.query.color;
+        const brand = !context.query?.brand? '': context.query.brand;
         // const sort = !context.query?.sort? 'asc': context.query.sort;
         // const sort = context.query.sort;
         const product = await axiosServer.get(
-            `/products?search=${search}&sortBy=${sortBy}&sort=${sort}&page=${page ?? 1}`
+            // `/products?search=${search}&sortBy=${sortBy}&sort=${sort}&page=${page ?? 1}`
+            `/products-all?search=${search}&sort=${sortBy}&sortBy=${sort}&page=${page ?? 1}&category=${category}&color=${color}&brand=${brand}&limit=12`
         );
         return{
             props:{
@@ -52,7 +56,8 @@ function Product(props) {
     };
     const [paginate, setPaginet] = React.useState(buttonPaginate[1]);
     React.useEffect(()=>{
-        Router.push(`/product/products?page=${paginate}&sortBy=${isActive}&sort=${sorting}`);
+        // Router.push(`/product/products?page=${paginate}&sortBy=${isActive}&sort=${sorting}`);
+        Router.push(`/product/products?page=${paginate}&sort=${sorting}&sortBy=${isActive}`);
     },[paginate,isActive,sorting]);
     return (
         <>
@@ -69,8 +74,8 @@ function Product(props) {
                                 {showDropdown ? <FiChevronUp/> : <FiChevronDown/>}
                             </button>
                             {showDropdown?<div className='bg-black w-40 flex flex-col py-10 px-5 gap-7 mt-10 absolute z-10 rounded-lg'>
-                                <span onClick={()=>{setIsActive('created_at'); setShowDropdown(false);}} className={`${isActive == 1 ? 'text-white' : 'text-gray-400' } hover:text-white cursor-pointer`}>Latest Product</span>
-                                <span onClick={()=>{setIsActive('price'); setSorting('decs');setShowDropdown(false);}} className={`${isActive == 2 ? 'text-white' : 'text-gray-400' } hover:text-white cursor-pointer`}>More Expensive</span>
+                                <span onClick={()=>{setIsActive('created_at'); setSorting('desc'); setShowDropdown(false);}} className={`${isActive == 1 ? 'text-white' : 'text-gray-400' } hover:text-white cursor-pointer`}>Latest Product</span>
+                                <span onClick={()=>{setIsActive('price'); setSorting('desc');setShowDropdown(false);}} className={`${isActive == 2 ? 'text-white' : 'text-gray-400' } hover:text-white cursor-pointer`}>More Expensive</span>
                                 <span onClick={()=>{setIsActive('price'); setSorting('asc');setShowDropdown(false);}} className={`${isActive == 3 ? 'text-white' : 'text-gray-400' } hover:text-white cursor-pointer`}>More Cheap</span>
                             </div> : null}
                         </div>
@@ -101,11 +106,10 @@ function Product(props) {
                     <div className='flex flex-col'>
                         <div className='wrap-products grid grid-cols-3 gap-7'>
                             {itemsCol?.map((e)=>{
-                                console.log(e.product_images);
                                 return(
                                     <>
                                         {/* <CardProduct productUrl={`/product/${e.id}/details`} img={e.product_images?<Image src={e.product_images.split(',')[0]}  width={260} height={260} layout={'responsive'} alt='img-product'/>:<BsShop size={260}/>} title={e.product_name} subtitle={e.price} /> */}
-                                        <CardProducts productUrl={`/product/${e.id}/details`} img={e.product_images?<Image src={e.product_images.split(',')[0]} objectFit='cover' layout='fill' alt='img-product' />:<BsShop size={260}/>} title={e.product_name} subtitle={e.price} />
+                                        <CardProducts key={e.id + e.product_name} productUrl={`/product/${e.id}/details`} img={e.product_images?<Image src={e.product_images.split(',')[0]} objectFit='cover' layout='fill' alt='img-product' />:<BsShop size={260}/>} title={e.product_name} subtitle={e.price} />
                                     </>
                                 );
                             })}

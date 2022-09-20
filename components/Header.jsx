@@ -27,7 +27,8 @@ export default function Header(){
     };
 
     const pageShop = (e) => {
-        router.push('/product/products?search');
+        // router.push('/product/products?search');
+        router.push('/product/products?page=1&sort=&sortBy=');
         setShop({active: !shop.active, left: e.pageX - 60, top: e.pageY + 30});
     };
 

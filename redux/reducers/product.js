@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { allCategory, createProduct, deleteProduct, getProductDetail, getProductUser, updateProduct } from '../asyncAction/product';
+import { allCategory, createProduct, deleteProduct, getProductDetail, getProductUser, productCategory, updateProduct } from '../asyncAction/product';
 
 const initialState = {
     resultCategories: [],
@@ -9,7 +9,8 @@ const initialState = {
     successUpdateMsg: null,
     resultProduct: [],
     resultProductDetail: {},
-    infoPage: {}
+    infoPage: {},
+    productCategory: [],
 };
 
 export const product = createSlice({
@@ -78,8 +79,20 @@ export const product = createSlice({
             state.errorUpdateMsg = action.payload.errorMsg;
             state.successUpdateMsg = action.payload.successMsg;
         });
+
+        build.addCase(productCategory.pending, (state) => {
+            state.errorMsg = null;
+            state.successMsg = null;
+        }),
+        build.addCase(productCategory.fulfilled, (state, action) => {
+            state.errorMsg = action.payload.errorMsg;
+            state.successMsg = action.payload.message;
+            if (action.payload.result !== null || action.payload.result !== undefined) {
+                state.productCategory = action.payload.result
+            }
+        });
     }
 });
 export const {resetUpdateMassage} = product.actions
-export {allCategory, createProduct, getProductUser, getProductDetail, updateProduct, deleteProduct};
+export {allCategory, createProduct, getProductUser, getProductDetail, updateProduct, deleteProduct, productCategory};
 export default product.reducer;

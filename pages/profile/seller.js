@@ -62,6 +62,10 @@ function Seller() {
             case 3:
                 console.log('store name')
                 break;
+            case 4:
+                console.log('image profile')
+                // console.log(value);
+                break;
             default:
                 console.log('store desc')
                 break;
@@ -150,7 +154,8 @@ function Seller() {
                             width={60} 
                             height={60}
                             alt='photo profile'
-                            className='rounded-full'
+                            className='rounded-full cursor-pointer'
+                            onClick={() => {setShowModal(true); setShowIndex(4);}}
                         />
                     </div>
                     <div className='flex flex-col justify-center'>
@@ -229,7 +234,7 @@ function Seller() {
             </div>
             {/* <ModalChangeName visible={showModal} onClose={handleClose} />
             <button onClick={() => setShowModal(true)}>test</button> */}
-            <ModalChangeName typeInput={showIndex === 2 ? 'email' : 'text'} visible={showModal} onClose={handleClose} title={showIndex === 0 ? 'Full Name' : showIndex === 1 ? 'Gender' : showIndex === 2 ? 'Email' : showIndex === 3 ? 'Store Name' : 'Store Description'} value={showIndex === 0 ? {full_name: ''} : showIndex === 1 ? {gender: ''} : showIndex === 2 ? {email: ''} : showIndex === 3 ? {store_name: ''} : {store_desc: ''}} valueName={showIndex === 0 ? 'full_name' : showIndex === 1 ? 'gender' : showIndex === 2 ? 'email' : showIndex === 3 ? 'store_name' : 'store_desc'} onHandleChange={changeName} validateScame={nameSechema} />
+            <ModalChangeName typeInput={showIndex === 2 ? 'email' : showIndex === 4 ? 'image' :'text'} visible={showModal} onClose={handleClose} title={showIndex === 0 ? 'Full Name' : showIndex === 1 ? 'Gender' : showIndex === 2 ? 'Email' : showIndex === 3 ? 'Store Name' : showIndex === 4 ? 'Profile picture' : 'Store Description'} value={showIndex === 0 ? {full_name: ''} : showIndex === 1 ? {gender: ''} : showIndex === 2 ? {email: ''} : showIndex === 3 ? {store_name: ''} : showIndex === 4 ? {image: null} : {store_desc: ''}} valueName={showIndex === 0 ? 'full_name' : showIndex === 1 ? 'gender' : showIndex === 2 ? 'email' : showIndex === 3 ? 'store_name' : showIndex === 4 ? 'image' : 'store_desc'} onHandleChange={changeName} validateScame={nameSechema} />
             <Footer />
         </>
         

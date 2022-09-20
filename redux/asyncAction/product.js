@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import qs from 'qs';
 import { http3 } from '../../helpers/http3';
+import axiosServer from '../../helpers/httpServer';
 
 export const allCategory = createAsyncThunk('category/all', async () => {
     const result = {};
@@ -87,3 +88,13 @@ export const deleteProduct = createAsyncThunk('product/delated', async (id) => {
         return result;
     }
 });
+
+export const productCategory = createAsyncThunk('product/category', async () => {
+    try {
+        const {data} = await axiosServer.get('/products-category')
+        return data
+    } catch (e) {
+        result.errorMsg = error.response.data.message;
+        return result;
+    }
+})
