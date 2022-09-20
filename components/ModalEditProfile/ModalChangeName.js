@@ -1,13 +1,15 @@
 import { Formik } from 'formik'
 import Image from 'next/image'
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { editPhotoCustomer } from '../../redux/asyncAction/customer'
 
 export default function ModalChangeName({visible, onClose, title, value, valueName, onHandleChange, typeInput, validateScame}) {
   const [picture, setPicture] = React.useState(null)
   const [file, setFile] = React.useState(null)
   const dispacth = useDispatch()
+  const successMsg = useSelector((state) => state.profileSeller.successMsg);
+  const errorMsg = useSelector((state) => state.profileSeller.errorMsg);
   // console.log(picture);
 
   const handleChangeImage = (event) => {
@@ -38,10 +40,15 @@ export default function ModalChangeName({visible, onClose, title, value, valueNa
   if (!visible) return null;
   return (
     <div id='modalChange' onClick={handleOnClose} className='fixed z-20 inset-0 bg-gray-700 bg-opacity-30 backdrop-blur-sm flex justify-center items-center'>
-      <div className='w-[500px] h-[350px] bg-white shadow-lg p-3 rounded flex flex-col items-center justify-center'>
+      <div className='w-[500px] h-[420px] bg-white shadow-lg p-3 rounded flex flex-col items-center justify-center'>
         <div className='mb-9 text-center'>
           <span className='font-bold text-[35px]'>Change your {title}</span>
         </div>
+        {(successMsg === 'Profile updated' || successMsg === 'Edit email successfully') && (
+          <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+            <span class="font-medium">{successMsg}</span>
+          </div>
+        )}
         {valueName !== 'image' ? (
           <Formik initialValues={value} onSubmit={onHandleChange} validationSchema={validateScame}>
           {({handleChange, handleSubmit, errors}) => (
@@ -63,7 +70,7 @@ export default function ModalChangeName({visible, onClose, title, value, valueNa
                 </>
               )}
               <div className='flex flex-row gap-5'>
-                <button onClick={() => {onClose(); setPicture(null);}} className='w-[100px] h-[50px] bg-red-500 rounded-md text-white hover:bg-red-600'><span className='font-bold text-xl'>Cancel</span></button>
+                <button onClick={() => {onClose(); setPicture(null);}} className='w-[100px] h-[50px] bg-red-500 rounded-md text-white hover:bg-red-600'><span className='font-bold text-xl'>Close</span></button>
                 <button type="submit" onClick={handleSubmit} className='w-[100px] h-[50px] bg-green-500 rounded-md text-white hover:bg-green-600'><span className='font-bold text-xl'>Change</span></button>
               </div>
             </>
@@ -80,7 +87,7 @@ export default function ModalChangeName({visible, onClose, title, value, valueNa
               </div>
             </div>
             <div className='flex flex-row gap-5'>
-              <button onClick={() => {onClose(); setPicture(null);}} className='w-[100px] h-[50px] bg-red-500 rounded-md text-white hover:bg-red-600'><span className='font-bold text-xl'>Cancel</span></button>
+              <button onClick={() => {onClose(); setPicture(null);}} className='w-[100px] h-[50px] bg-red-500 rounded-md text-white hover:bg-red-600'><span className='font-bold text-xl'>Close</span></button>
               <button disabled={file === null} onClick={editProfileBtn} className='w-[100px] h-[50px] bg-green-500 rounded-md text-white hover:bg-green-600 disabled:bg-slate-600'><span className='font-bold text-xl'>Change</span></button>
             </div>
           </>
