@@ -22,7 +22,7 @@ export default function Footer(){
                     <div className='flex flex-col gap-8'>
                         <span className='text-md font-medium'>COMPANY</span>
                         <div className='flex flex-col gap-4'>
-                            <Link href={'/#'}><span className='text-sm cursor-pointer'>About Us</span></Link>
+                            <Link href={'/main/About'}><span className='text-sm cursor-pointer'>About Us</span></Link>
                             <Link href={'/#'}><span className='text-sm cursor-pointer'>Help Center</span></Link>
                             <Link href={'/#'}><span className='text-sm cursor-pointer'>Licenses</span></Link>
                             <Link href={'/#'}><span className='text-sm cursor-pointer'>Market API</span></Link>
