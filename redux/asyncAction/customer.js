@@ -21,13 +21,28 @@ export const editProfileCustomer = createAsyncThunk('/profile/customer/edit', as
     try{
         const send = qs.stringify(request);
         const {data} = await http3().patch('/authenticated-costumer/profile/customer',send);
-        console.log(data);
-        results.success = data.messages;
+        results.success = data.message;
         return results;
     }
     catch(e){
         console.log(e);
-        results.error = data.messages;
+        results.error = data.message;
+        return results;
+    }
+})
+
+export const editPhotoCustomer = createAsyncThunk('/profile/customer/edit', async({file})=>{
+    const results = {}
+    try{
+        const form = new FormData()
+        form.append('images',file)
+        const {data} = await http3().patch('/authenticated-costumer/profile/customer',form);
+        results.success = data.message;
+        return results;
+    }
+    catch(e){
+        console.log(e);
+        results.error = data.message;
         return results;
     }
 })
