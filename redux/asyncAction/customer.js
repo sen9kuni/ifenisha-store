@@ -16,11 +16,11 @@ export const getProfileCustomer = createAsyncThunk('/profile/costumer', async(to
     }
 })
 
-export const editProfileCustomer = createAsyncThunk('/profile/customer/edit', async({token,request})=>{
+export const editProfileCustomer = createAsyncThunk('/profile/customer/edit', async({request})=>{
     const results = {}
     try{
         const send = qs.stringify(request);
-        const {data} = await http3(token).patch('/authenticated-costumer/profile/customer',send);
+        const {data} = await http3().patch('/authenticated-costumer/profile/customer',send);
         console.log(data);
         results.success = data.messages;
         return results;
@@ -32,11 +32,11 @@ export const editProfileCustomer = createAsyncThunk('/profile/customer/edit', as
     }
 })
 
-export const editEmailCustomer = createAsyncThunk('/profile/customer/email', async({token,request})=>{
+export const editEmailCustomer = createAsyncThunk('/profile/customer/email', async(request)=>{
     const results = {}
     try{
         const send = qs.stringify(request);
-        const {data} = await http3(token).patch('/authenticated-costumer/profile/customer/email',send)
+        const {data} = await http3().patch('/authenticated-costumer/profile/customer/email',send)
         console.log(data);
         results.success = data.messages
         return results
