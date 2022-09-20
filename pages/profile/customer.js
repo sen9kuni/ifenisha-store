@@ -1,4 +1,4 @@
-
+import * as Yup from 'yup';
 import React from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -8,19 +8,67 @@ import Link from 'next/link';
 import Banner from '../../components/Banner';
 import {FiEdit3, FiLogOut} from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProfileCustomer } from '../../redux/asyncAction/customer';
+import { editProfileCustomer, getProfileCustomer } from '../../redux/asyncAction/customer';
+import ModalChangeName from '../../components/ModalEditProfile/ModalChangeName';
+import Router from 'next/router';
+
+const nameSechema = Yup.object().shape({
+    full_name: Yup.string().min(3, 'full name must be at least 3 characters').required('full name is a required field').optional(),
+    email: Yup.string().email('Invalid email address format').required().optional(),
+    store_name: Yup.string().min(5).required().optional(),
+    store_desc: Yup.string().min(10).required().optional()
+});
 
 function Customer() {
     const dispatch = useDispatch();
+    const [showModal, setShowModal] = React.useState(false)
+    const [showIndex, setShowIndex] = React.useState(null)
+    const successmsg = useSelector(state=>state.custumer?.successmsg)
     const token = useSelector(state=>state.auth.token);
     const role = useSelector((state) => state.auth.role);
     const profile = useSelector(state => state.customer?.data)
     const menuTab = ['Profile'];
     const linkTo = [`/profile/${role==='seller'?'seller':'customer'}`, '/profile/my-product', '/profile/add-product', '/order'];
     const indexTab = 0;
+    const handleClose = type => {
+        switch (type) {
+            case 'full_name':
+                setShowModal(false)
+                break;
+            case 'email':
+                setShowModalEmail(false)
+                break;
+            default:
+                break;
+        }
+        setShowModal(false)
+    }
+    const changeName = value => {
+        switch (showIndex) {
+            case 0:
+                const request = {full_name: value.full_name}
+                dispatch(editProfileCustomer({request}));
+                break;
+            case 1:
+                console.log('gender')
+                break;
+            case 2:
+                console.log('email')
+                break;
+            case 3:
+                console.log('store name')
+                break;
+            default:
+                console.log('store desc')
+                break;
+        }
+    }
     React.useEffect(()=>{
         dispatch(getProfileCustomer(token))
-    },[])
+        if(!token){
+            Router.push('/login')
+        }
+    },[successmsg])
     return (
         <>
             <Header />
@@ -57,10 +105,10 @@ function Customer() {
                         />
                     </div>
                     <div className='flex flex-col justify-center'>
-                        <div className='flex items-center'>
-                            <Link href='#'><a>{profile.full_name}</a></Link>
+                        <button onClick={() => {setShowModal(true); setShowIndex(0);}} className='flex items-center'>
+                            <div ><a>{profile.full_name}</a></div>
                             <FiEdit3 />
-                        </div>
+                        </button>
                         <div>
                             <p className=''>as Customer</p>
                         </div>
@@ -73,30 +121,30 @@ function Customer() {
                             <div className='font-semibold'>Gender</div>
                             <div className='text-base'>{profile.gender}</div>
                         </div>
-                        <div className='flex flex-row items-center gap-1'>
-                            <Link href='#'><a className='font-semibold'>Edit</a></Link>
+                        <button onClick={() => {setShowModal(true); setShowIndex(1);}} className='flex flex-row items-center gap-1'>
+                            <div><a className='font-semibold'>Edit</a></div>
                             <FiEdit3 />
-                        </div>
+                        </button>
                     </div>
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='font-semibold'>Your Email</div>
                             <div className=''>{profile.email}</div>
                         </div>
-                        <div className='flex flex-row items-center gap-1'>
-                            <Link href='#'><a className='font-semibold'>Edit</a></Link>
+                        <button onClick={() => {setShowModal(true); setShowIndex(2);}} className='flex flex-row items-center gap-1'>
+                            <div><a className='font-semibold'>Edit</a></div>
                             <FiEdit3 />
-                        </div>
+                        </button>
                     </div>
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='font-semibold'>Bio</div>
                             <div className=''>{profile.store_desc}</div>
                         </div>
-                        <div className='flex flex-row items-center gap-1'>
-                            <Link href='#'><a className='font-semibold'>Edit</a></Link>
+                        <button onClick={() => {setShowModal(true); setShowIndex(4);}} className='flex flex-row items-center gap-1'>
+                            <div><a className='font-semibold'>Edit</a></div>
                             <FiEdit3 />
-                        </div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -106,7 +154,7 @@ function Customer() {
                     <span>Logout</span>
                 </button>
             </div>
-
+            <ModalChangeName typeInput={showIndex === 2 ? 'email' : 'text'} visible={showModal} onClose={handleClose} title={showIndex === 0 ? 'Full Name' : showIndex === 1 ? 'Gender' : showIndex === 2 ? 'Email' : showIndex === 3 ? 'Store Name' : 'Store Description'} value={showIndex === 0 ? {full_name: ''} : showIndex === 1 ? {gender: ''} : showIndex === 2 ? {email: ''} : showIndex === 3 ? {store_name: ''} : {store_desc: ''}} valueName={showIndex === 0 ? 'full_name' : showIndex === 1 ? 'gender' : showIndex === 2 ? 'email' : showIndex === 3 ? 'store_name' : 'store_desc'} onHandleChange={changeName} validateScame={nameSechema} />
             <Footer />
         </>
         
