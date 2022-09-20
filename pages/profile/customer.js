@@ -8,9 +8,11 @@ import Link from 'next/link';
 import Banner from '../../components/Banner';
 import {FiEdit3, FiLogOut} from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
-import { editProfileCustomer, getProfileCustomer } from '../../redux/asyncAction/customer';
+import { editPhotoCustomer, editProfileCustomer, getProfileCustomer } from '../../redux/asyncAction/customer';
 import ModalChangeName from '../../components/ModalEditProfile/ModalChangeName';
 import Router from 'next/router';
+import { resetMsgProfileCos } from '../../redux/reducers/customer';
+import default_image from '../../public/images/default.jpg';
 
 const nameSechema = Yup.object().shape({
     full_name: Yup.string().min(3, 'full name must be at least 3 characters').required('full name is a required field').optional(),
@@ -23,7 +25,7 @@ function Customer() {
     const dispatch = useDispatch();
     const [showModal, setShowModal] = React.useState(false)
     const [showIndex, setShowIndex] = React.useState(null)
-    const successmsg = useSelector(state=>state.custumer?.successmsg)
+    const successmsg = useSelector(state=>state.customer?.successmsg)
     const token = useSelector(state=>state.auth.token);
     const role = useSelector((state) => state.auth.role);
     const profile = useSelector(state => state.customer?.data)
@@ -43,30 +45,43 @@ function Customer() {
         }
         setShowModal(false)
     }
+    let request = ''
     const changeName = value => {
         switch (showIndex) {
             case 0:
-                const request = {full_name: value.full_name}
+                request = {full_name: value.full_name}
                 dispatch(editProfileCustomer({request}));
                 break;
             case 1:
-                console.log('gender')
+                request = {gender: value.gender}
+                dispatch(editProfileCustomer({request}));
                 break;
             case 2:
-                console.log('email')
+                request = {email: value.email}
+                dispatch(editProfileCustomer({request}));
                 break;
             case 3:
-                console.log('store name')
+                request = {store_name: value.store_name}
+                dispatch(editProfileCustomer({request}));
+                break;
+            case 4:
+                request = {images: value.images}
+                dispatch(editPhotoCustomer({request}));
                 break;
             default:
-                console.log('store desc')
+                request = {store_desc: value.store_desc}
+                dispatch(editProfileCustomer({request}));
                 break;
         }
     }
     React.useEffect(()=>{
-        dispatch(getProfileCustomer(token))
+        dispatch(getProfileCustomer())
+        dispatch(resetMsgProfileCos())
         if(!token){
             Router.push('/login')
+        }
+        if(successmsg){
+            setShowModal(false)
         }
     },[successmsg])
     return (
@@ -97,11 +112,12 @@ function Customer() {
             <div>
                 <div className='flex flex-row p-5 mx-[150px] my-10 gap-4'>
                     <div>
-                        <Image src='/images/Ellipse3.png' 
+                        <Image src={profile.image||default_image} 
                             width={60} 
                             height={60}
                             alt='photo profile'
                             className='rounded-full'
+                            onClick={() => {setShowModal(true); setShowIndex(4);}}
                         />
                     </div>
                     <div className='flex flex-col justify-center'>
@@ -141,7 +157,7 @@ function Customer() {
                             <div className='font-semibold'>Bio</div>
                             <div className=''>{profile.store_desc}</div>
                         </div>
-                        <button onClick={() => {setShowModal(true); setShowIndex(4);}} className='flex flex-row items-center gap-1'>
+                        <button onClick={() => {setShowModal(true); setShowIndex(5);}} className='flex flex-row items-center gap-1'>
                             <div><a className='font-semibold'>Edit</a></div>
                             <FiEdit3 />
                         </button>
@@ -154,7 +170,7 @@ function Customer() {
                     <span>Logout</span>
                 </button>
             </div>
-            <ModalChangeName typeInput={showIndex === 2 ? 'email' : 'text'} visible={showModal} onClose={handleClose} title={showIndex === 0 ? 'Full Name' : showIndex === 1 ? 'Gender' : showIndex === 2 ? 'Email' : showIndex === 3 ? 'Store Name' : 'Store Description'} value={showIndex === 0 ? {full_name: ''} : showIndex === 1 ? {gender: ''} : showIndex === 2 ? {email: ''} : showIndex === 3 ? {store_name: ''} : {store_desc: ''}} valueName={showIndex === 0 ? 'full_name' : showIndex === 1 ? 'gender' : showIndex === 2 ? 'email' : showIndex === 3 ? 'store_name' : 'store_desc'} onHandleChange={changeName} validateScame={nameSechema} />
+            <ModalChangeName typeInput={showIndex === 2 ? 'email' : 'text'} visible={showModal} onClose={handleClose} title={showIndex === 0 ? 'Full Name' : showIndex === 1 ? 'Gender' : showIndex === 2 ? 'Email' : showIndex === 3 ? 'Store Name' : 'Store Description'} value={showIndex === 0 ? {full_name: ''} : showIndex === 1 ? {gender: ''} : showIndex === 2 ? {email: ''} : showIndex === 3 ? {store_name: ''} :showIndex === 4 ? {images: null}: {store_desc: ''}} valueName={showIndex === 0 ? 'full_name' : showIndex === 1 ? 'gender' : showIndex === 2 ? 'email' : showIndex === 3 ? 'store_name' :showIndex === 4 ? 'image' : 'store_desc'} onHandleChange={changeName} validateScame={nameSechema} />
             <Footer />
         </>
         

@@ -1,10 +1,13 @@
 import { Formik } from 'formik'
 import Image from 'next/image'
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { editPhotoCustomer } from '../../redux/asyncAction/customer'
 
 export default function ModalChangeName({visible, onClose, title, value, valueName, onHandleChange, typeInput, validateScame}) {
   const [picture, setPicture] = React.useState(null)
   const [file, setFile] = React.useState(null)
+  const dispacth = useDispatch()
   // console.log(picture);
 
   const handleChangeImage = (event) => {
@@ -23,7 +26,7 @@ export default function ModalChangeName({visible, onClose, title, value, valueNa
 
   const editProfileBtn = () => {
     if(file) {
-      console.log(file)
+      dispacth(editPhotoCustomer({file}))
     }
   }
   
