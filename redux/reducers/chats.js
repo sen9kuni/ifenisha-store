@@ -47,6 +47,14 @@ export const chats = createSlice({
         build.addCase(createChat.fulfilled,(state,action)=>{
             state.succesmsg=action.payload?.msg;
         });
+        build.addCase(sending.pending,(state)=>{
+            state.succesmsg=null;
+            state.errormsg=null;
+        });
+        build.addCase(sending.fulfilled,(state,action)=>{
+            state.succesmsg=action.payload?.success;
+            state.errormsg=action.payload?.error;
+        });
     }
 });
 
