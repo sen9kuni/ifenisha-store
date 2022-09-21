@@ -17,27 +17,77 @@ import axiosServer from '../../../../helpers/httpServer';
 import { useDispatch, useSelector } from 'react-redux';
 import { createChat } from '../../../../redux/asyncAction/chats';
 import Router from 'next/router';
+import { http3 } from '../../../../helpers/http3';
+import cookies from 'next-cookies';
+import axiosApiIntances from '../../../../helpers/httpServer';
 
 export async function getServerSideProps(context){
-    try{
-        const id = !context.query?.idProduct?'':context.query.idProduct;
-        const result = await axiosServer.get(
-            `/products/details/${id}`
-        );
-        return{
-            props:{
-                dataProduct:result.data.result
-            }
-        };
+    const DataCookies = cookies(context)
+    console.log(DataCookies);
+    if (DataCookies.token) {
+        try{
+            const id = !context.query?.idProduct?'':context.query.idProduct;
+            const result = await axiosApiIntances.get(
+                `/products/details/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${DataCookies.token}`
+                }
+                }
+                );
+            return{
+                props:{
+                    dataProduct:result.data.result
+                }
+            };
+        }
+        catch(err){
+            console.log(err);
+            return {
+                props:{
+                    isError:true
+                }
+            };
+        }
+        } else {
+        try{
+            const id = !context.query?.idProduct?'':context.query.idProduct;
+            const result = await axiosServer.get(
+                `/products/details/public/${id}`
+            );
+            return{
+                props:{
+                    dataProduct:result.data.result
+                }
+            };
+        }
+        catch(err){
+            console.log(err);
+            return {
+                props:{
+                    isError:true
+                }
+            };
+        }
     }
-    catch(err){
-        console.log(err);
-        return {
-            props:{
-                isError:true
-            }
-        };
-    }
+    // try{
+    //     const id = !context.query?.idProduct?'':context.query.idProduct;
+    //     const result = await axiosApiIntances(DataCookies.token).get(
+    //         `/products/details/${id}`
+    //         );
+    //     return{
+    //         props:{
+    //             dataProduct:result.data.result
+    //         }
+    //     };
+    // }
+    // catch(err){
+    //     console.log(err);
+    //     return {
+    //         props:{
+    //             isError:true
+    //         }
+    //     };
+    // }
 };
 
 const DetailProductTabContent = ({imgPath }) => {
@@ -91,6 +141,7 @@ const BreadCumbProductDetail = () => {
 };
 
 function ProductDetail(props) {
+    console.log(props.dataProduct);
     const dispatch = useDispatch();
     const product = props.dataProduct[0];
     // console.log(product.product_images);
