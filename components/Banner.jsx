@@ -25,9 +25,9 @@ function Banner({basePath, basePathUrl, targetPath, targetPathUrl, titleBanner, 
                                     </li>
                                     <li>
                                         <div className='flex items-center'>
-                                            {targetPath ? <FiChevronRight/> : null}
+                                            {targetPath || targetPath === '.' ? <FiChevronRight/> : null}
                                             <Link href={targetPathUrl??'#'}>
-                                                <a className='ml-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:hover:text-white'>{targetPath}</a>
+                                                <a className={`ml-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:hover:text-white ${targetPath === '.' ? 'hidden' : ''}`}>{targetPath}</a>
                                             </Link>
                                         </div>
                                     </li>
