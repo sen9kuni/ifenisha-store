@@ -21,6 +21,9 @@ import { http3 } from '../../../../helpers/http3';
 import cookies from 'next-cookies';
 import axiosApiIntances from '../../../../helpers/httpServer';
 import { resetChatmsg } from '../../../../redux/reducers/chats';
+import { addToCart } from '../../../../redux/asyncAction/cart';
+import { decrement, increment, resetCounter } from '../../../../redux/reducers/counter';
+import { resetCartMsg } from '../../../../redux/reducers/cart';
 
 export async function getServerSideProps(context){
     const DataCookies = cookies(context)
@@ -140,10 +143,11 @@ const BreadCumbProductDetail = () => {
 };
 
 function ProductDetail(props) {
-    const idProduct = props.dataProduct[0].id;
     const dispatch = useDispatch();
+    const idProduct = props.dataProduct[0].id;
     const product = props.dataProduct[0];
     const token = useSelector(state=>state.auth.token);
+    const counter = useSelector(state => state.counter.num);
     // console.log(product.product_images);
     const imagesProd = typeof(product.product_images);
     const imgList = imagesProd !== 'string'?[]:[product.product_images];
@@ -155,7 +159,6 @@ function ProductDetail(props) {
     // emergancy
     const imageProduct = product.product_images
     const finalImage = imageProduct.split(',')
-    console.log(finalImage);
     // emergancy
     const [chooseItem, setChooseItem] = React.useState(finalImage[0]);
     const ratingItem = [1,2,3,4,5];
@@ -165,35 +168,47 @@ function ProductDetail(props) {
     const [tabActive, setTabActive] = React.useState(0);
     const [paginate, setPaginate] = React.useState(0);
     const data = product.user_id;
-    const request = {recepient:data};
-    const succesChatmsg = useSelector((state=>state.chats.succesmsg));
+    const succesChatmsg = useSelector((state=>state.chats.successmsg));
+    const succesCartmsg = useSelector((state=>state.cart.successmsg));
+    console.log(succesCartmsg);
     const chatSeller = () =>{
         if(!token){
             Router.push('/login')
         } else {
+            const request = {recepient:data};
             dispatch(createChat(request));
         }
 
     };
-    const addToCart = () => {
+    const addToCartBtn = () => {
         if(!token){
             Router.push('/login')
         } else {
-            dispatch
+            const request = {product_id: idProduct, quantity: counter};
+            dispatch(addToCart(request))
         }
     }
+    if(succesCartmsg){
+        setTimeout(()=>dispatch(resetCartMsg()),5000);
+    }
     React.useEffect(()=>{
+        dispatch(resetCounter())
         if(succesChatmsg){
             dispatch(resetChatmsg());
             Router.push('/chats');
         }
-    },[succesChatmsg]);
+    },[succesChatmsg,succesCartmsg]);
     return (
         <>
             <Head>
                 <title>Product - product detail</title>
             </Head>
             <Header/>
+            {succesCartmsg?
+                <div className="sticky top-0 z-50 h-10 w-auto p-4 mb-4 text-center text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+                    <span className="font-bold text-2xl text-center">Item Added to cart</span>
+                </div>
+            : null}
             <section>
                 <BreadCumbProductDetail/>
 
@@ -264,14 +279,14 @@ function ProductDetail(props) {
                         <div className='flex gap-3 my-7'>
                             <div className='p-4 border border-gray-400 flex items-center gap-4 rounded-sm shadow-md'>
                                 <div className='cursor-pointer text-black'>
-                                    <FiMinus/>
+                                    <FiMinus onClick={()=>dispatch(decrement())} />
                                 </div>
-                                <span className='text-black font-semibold'>01</span>
+                                <span className='text-black font-semibold'>{counter}</span>
                                 <div className='cursor-pointer text-black'>
-                                    <FiPlus/>
+                                    <FiPlus onClick={()=>dispatch(increment())} />
                                 </div>
                             </div>
-                            <button className='bg-black px-7 rounded-sm shadow-md hover:bg-gray-900'>
+                            <button onClick={()=>addToCartBtn()} className='bg-black px-7 rounded-sm shadow-md hover:bg-gray-900'>
                                 <span className='text-white font-semibold'>Add to cart</span>
                             </button>
                             <button className='bg-black px-7 rounded-sm shadow-md hover:bg-gray-900'>
@@ -282,7 +297,7 @@ function ProductDetail(props) {
                             <button className='border border-gray-400 px-7 rounded-sm shadow-md hover:border-gray-800'>
                                 <span className='text-black font-semibold'>Add to wishlist</span>
                             </button>
-                            <button onClick={chatSeller} className='border border-gray-400 px-7 rounded-sm shadow-md hover:border-gray-800'>
+                            <button onClick={()=>chatSeller()} className='border border-gray-400 px-7 rounded-sm shadow-md hover:border-gray-800'>
                                 <span className='text-black font-semibold'>Chat Seller</span>
                             </button>
                         </div>
