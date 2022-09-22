@@ -64,11 +64,11 @@ export default function Header(){
                         page.active&&
                         <div style={{top: page.top, left: page.left}} className={'absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10'}>
                             <div className='py-1' role='none'>
-                                <a href='/main/About' className='text-gray-700 block px-4 py-2 text-sm' role='menuitem' id='menu-item-0'>About Us</a>
-                                <a href='/main/Contact' className='text-gray-700 block px-4 py-2 text-sm' role='menuitem' id='menu-item-1'>Contact Us</a>
-                                <a href='/main/Comingsoon' className='text-gray-700 block px-4 py-2 text-sm' role='menuitem' id='menu-item-2'>Coming Soon</a>
-                                <a href='#' className='text-gray-700 block px-4 py-2 text-sm' role='menuitem' id='menu-item-3'>404 Page</a>
-                                <a href='/main/Faq' className='text-gray-700 block px-4 py-2 text-sm' role='menuitem' id='menu-item-4'>FAQ Page</a>
+                                <Link href={'/main/About'}><span className='text-gray-700 block px-4 py-2 text-sm cursor-pointer' role='menuitem' id='menu-item-0'>About Us</span></Link>
+                                <Link href={'/main/Contact'}><span className='text-gray-700 block px-4 py-2 text-sm cursor-pointer' role='menuitem' id='menu-item-1'>Contact Us</span></Link>
+                                <Link href={'/main/Comingsoon'}><span className='text-gray-700 block px-4 py-2 text-sm cursor-pointer' role='menuitem' id='menu-item-2'>Coming Soon</span></Link>
+                                <Link href={'#'}><span className='text-gray-700 block px-4 py-2 text-sm cursor-pointer' role='menuitem' id='menu-item-3'>404 Page</span></Link>
+                                <Link href={'/main/Faq'}><span className='text-gray-700 block px-4 py-2 text-sm cursor-pointer' role='menuitem' id='menu-item-4'>FAQ Page</span></Link>
                             </div>
                         </div>
                     }
