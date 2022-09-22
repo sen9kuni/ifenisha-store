@@ -174,7 +174,7 @@ function ProductDetail(props) {
         if(succesmsg){
             Router.push('/chats');
         }
-    },succesmsg);
+    },[succesmsg]);
     return (
         <>
             <Head>

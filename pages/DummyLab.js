@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 import {BsShop} from 'react-icons/bs';
-import { FiPlus } from 'react-icons/fi';
+import { FiCheck, FiMinusCircle, FiPlus, FiPlusCircle, FiTrash2, FiX } from 'react-icons/fi';
 import CardProduct from '../components/CardProduct';
 
 function DummyLab() {
@@ -256,6 +256,248 @@ function DummyLab() {
             <input type='file' className='hidden' />
           </label>
         </div>
+    </div>
+
+    <div className='w-full h-[700px] flex justify-center items-center flex-col mb-5'>
+      <div className='w-[1160px] h-[72px] bg-white mb-3 border-t-2 border-b-2 border-gray-600'>
+        <div className='w-full h-full grid grid-cols-3'>
+          <div className='w-full h-full grid grid-cols-1 items-center'>
+            <span className='font-bold text-black'>Product</span>
+          </div>
+          <div className='col-span-2'>
+            <div className='w-full h-full grid grid-cols-2 items-center'>
+              <div>
+                <span className='font-bold text-black'>Stock Status</span>
+              </div>
+              <div>
+                <span className='font-bold text-black'>Price</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='w-[1160px] h-[172px] bg-white mb-3'>
+        <div className='w-full h-full grid grid-cols-3'>
+          <div className='col-span-1'>
+            <div className='h-full grid grid-cols-2 items-center'>
+              <div className='h-full w-[172px] relative overflow-hidden'>
+                <Image src={'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
+              </div>
+              <div className='w-full'>
+                  <p className='text-lg truncate'>Dining Side Chair in Beige vbeviov vbweobw</p>
+              </div>
+            </div>
+          </div>
+          <div className='col-span-2'>
+            <div className='w-full h-full grid grid-cols-2 items-center'>
+              <div className='flex flex-row items-center'>
+                <div className='h-[15px] w-[15px] border-2 border-black rounded-full flex justify-center items-center mr-1'>
+                  <FiCheck size={10} />
+                </div>
+                <span>In Stock</span>
+              </div>
+              <div className='flex justify-between items-center'>
+                <span className='font-extrabold text-black'>$765.99</span>
+                <div className='flex items-center'>
+                  <button className='w-[200px] h-[60px] bg-black mr-1 font-bold text-white hover:bg-slate-800'>Add to cart</button>
+                  <button className='h-[60px] w-[60px] bg-red-600 mr-1 font-bold text-white flex justify-center items-center hover:bg-red-500'><FiTrash2 size={25} /></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='w-[1160px] h-[172px] bg-white mb-3'>
+        <div className='w-full h-full grid grid-cols-3'>
+          <div className='col-span-1'>
+            <div className='h-full grid grid-cols-2 items-center'>
+              <div className='h-full w-[172px] relative overflow-hidden'>
+                <Image src={'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
+              </div>
+              <div className='w-full'>
+                  <p className='text-lg truncate'>Dining Side Chair in Beige vbeviov vbweobw</p>
+              </div>
+            </div>
+          </div>
+          <div className='col-span-2'>
+            <div className='w-full h-full grid grid-cols-2 items-center'>
+              <div className='flex flex-row items-center'>
+                <div className='h-[15px] w-[15px] border-2 border-black rounded-full flex justify-center items-center mr-1'>
+                  <FiCheck size={10} />
+                </div>
+                <span>In Stock</span>
+              </div>
+              <div className='flex justify-between items-center'>
+                <span className='font-extrabold text-black'>$765.99</span>
+                <div className='flex items-center'>
+                  <button className='w-[200px] h-[60px] bg-black mr-1 font-bold text-white hover:bg-slate-800'>Add to cart</button>
+                  <button className='h-[60px] w-[60px] bg-red-600 mr-1 font-bold text-white flex justify-center items-center hover:bg-red-500'><FiTrash2 size={25} /></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='w-[1160px] h-[172px] bg-white mb-3'>
+        <div className='w-full h-full grid grid-cols-3'>
+          <div className='col-span-1'>
+            <div className='h-full grid grid-cols-2 items-center'>
+              <div className='h-full w-[172px] relative overflow-hidden'>
+                <Image src={'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
+              </div>
+              <div className='w-full'>
+                  <p className='text-lg truncate'>Dining Side Chair in Beige</p>
+              </div>
+            </div>
+          </div>
+          <div className='col-span-2'>
+            <div className='w-full h-full grid grid-cols-2 items-center'>
+              <div className='flex flex-row items-center'>
+                <div className='h-[15px] w-[15px] border-2 border-black rounded-full flex justify-center items-center mr-1'>
+                  <FiCheck size={10} />
+                </div>
+                <span>In Stock</span>
+              </div>
+              <div className='flex justify-between items-center'>
+                <span className='font-extrabold text-black'>$765.99</span>
+                <div className='flex items-center'>
+                  <button className='w-[200px] h-[60px] bg-black mr-1 font-bold text-white hover:bg-slate-800'>Add to cart</button>
+                  <button className='h-[60px] w-[60px] bg-red-600 mr-1 font-bold text-white flex justify-center items-center hover:bg-red-500'><FiTrash2 size={25} /></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className='w-full h-[700px] flex justify-center items-center flex-col mb-5'>
+      <div className='w-[730px] h-[60px] bg-white mb-3'>
+        <div className='w-full h-full grid grid-cols-10'>
+          <div className='col-span-1' />
+          <div className='col-span-9 w-full h-full grid grid-cols-2 items-center'>
+            <div className='col-span-1'>
+              <span className='text-base text-slate-500'>PRODUCTS</span>
+            </div>
+            <div className='col-span-1 flex flex-row justify-between'>
+              <span className='text-base text-slate-500'>PRICE</span>
+              <span className='text-base text-slate-500'>QUANTITY</span>
+              <span className='text-base text-slate-500'>TOTAL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='w-[730px] h-[83px] bg-white mb-3'>
+        <div className='w-full h-full grid grid-cols-10'>
+          <div className='col-span-1 flex justify-center items-center'>
+            <button className='h-[20px] w-[20px] bg-red-600 mr-1 font-bold text-white flex justify-center items-center hover:bg-red-500'><FiX size={15} /></button>
+          </div>
+
+          <div className='col-span-9 w-full h-full grid grid-cols-2'>
+            <div className='col-span-1'>
+              <div className='w-full h-full grid grid-cols-3'>
+                <div className='h-full w-[69px] relative overflow-hidden'>
+                  <Image src={'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
+                </div>
+                <div className='col-span-1 flex items-center w-full'><p className='text-lg truncate'>Dining Side Chair in Beige</p></div>
+              </div>
+            </div>
+            <div className='col-span-1'>
+              <div className='w-full h-full flex flex-row justify-between items-center'>
+                <span className='text-base'>$10.50</span>
+                <div className='w-[100px] flex flex-row justify-between'>
+                  <button><FiPlusCircle /></button>
+                  <span className='text-base'>02</span>
+                  <button><FiMinusCircle /></button>
+                </div>
+                <span className='font-bold'>$21.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className='w-[730px] h-[83px] bg-white mb-3'>
+        <div className='w-full h-full grid grid-cols-10'>
+          <div className='col-span-1 flex justify-center items-center'>
+            <button className='h-[20px] w-[20px] bg-red-600 mr-1 font-bold text-white flex justify-center items-center hover:bg-red-500'><FiX size={15} /></button>
+          </div>
+
+          <div className='col-span-9 w-full h-full grid grid-cols-2'>
+            <div className='col-span-1'>
+              <div className='w-full h-full grid grid-cols-3'>
+                <div className='h-full w-[69px] relative overflow-hidden'>
+                  <Image src={'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
+                </div>
+                <div className='col-span-1 flex items-center w-full'><p className='text-lg truncate'>Dining Side Chair in Beige</p></div>
+              </div>
+            </div>
+            <div className='col-span-1'>
+              <div className='w-full h-full flex flex-row justify-between items-center'>
+                <span className='text-base'>$10.50</span>
+                <div className='w-[100px] flex flex-row justify-between'>
+                  <button><FiPlusCircle /></button>
+                  <span className='text-base'>02</span>
+                  <button><FiMinusCircle /></button>
+                </div>
+                <span className='font-bold'>$21.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='w-[730px] h-[83px] bg-white mb-3'>
+        <div className='w-full h-full grid grid-cols-10'>
+          <div className='col-span-1 flex justify-center items-center'>
+            <button className='h-[20px] w-[20px] bg-red-600 mr-1 font-bold text-white flex justify-center items-center hover:bg-red-500'><FiX size={15} /></button>
+          </div>
+
+          <div className='col-span-9 w-full h-full grid grid-cols-2'>
+            <div className='col-span-1'>
+              <div className='w-full h-full grid grid-cols-3'>
+                <div className='h-full w-[69px] relative overflow-hidden'>
+                  <Image src={'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
+                </div>
+                <div className='col-span-1 flex items-center w-full'><p className='text-lg truncate'>Dining Side Chair in Beige</p></div>
+              </div>
+            </div>
+            <div className='col-span-1'>
+              <div className='w-full h-full flex flex-row justify-between items-center'>
+                <span className='text-base'>$10.50</span>
+                <div className='w-[100px] flex flex-row justify-between'>
+                  <button><FiPlusCircle /></button>
+                  <span className='text-base'>02</span>
+                  <button><FiMinusCircle /></button>
+                </div>
+                <span className='font-bold'>$21.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='w-[730px] h-[70px] bg-white border-t-2 border-slate-300 flex items-end pb-2'>
+        <div className='w-full grid grid-cols-2'>
+          <div className='col-span-1 w-full flex flex-row justify-between border-b-2 border-slate-300'>
+              <input class="appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Enter your coupon code" />
+              <button className='font-bold'>Apply Coupon</button>
+          </div>
+          <div className='col-span-1 w-full flex items-center'>
+            <div className='w-full grid grid-cols-2'>
+              <div className='col-span-1' />
+              <div className='col-span-1 w-full flex flex-row justify-end'>
+                <button className='mr-5 text-base text-slate-300'>Clear Cart</button>
+                <button className='font-bold text-black'>Update Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     </>
   )
