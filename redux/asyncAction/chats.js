@@ -8,7 +8,7 @@ export const sending = createAsyncThunk('/chat/sending',async(request)=>{
         const send = qs.stringify(request);
         const {data} = await http3().post('/chat/content',send);
         console.log(data);
-        result.text = data.content;
+        result.success = data.message;
         return result;
     }
     catch(e){

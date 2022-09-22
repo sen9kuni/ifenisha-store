@@ -14,12 +14,12 @@ const schemaChat = Yup.object().shape({
     chats: Yup.string().min(1).required()
 });
 
-const FormChats = ({errors,handleChange,handleSubmit}) =>{
+const FormChats = ({errors,handleChange,handleSubmit,values}) =>{
     return(
         <>
             <form onSubmit={handleSubmit} className='flex items-center'>
                 <div className='grow'>
-                    <input className='text-[14px] w-11/12' onChange={handleChange} placeholder='Write Massage Here' name='chats' type='text' isInvalid={!!errors.chats}/>
+                    <input className='text-[14px] w-11/12' onChange={handleChange} placeholder='Write Massage Here' value={values.chats} name='chats' type='text' isInvalid={!!errors.chats}/>
                 </div>
                 <div className='flex-none py-4 px-16 bg-[#1A1A1A]'>
                     <button type='submit' className='text-[#FFFFFF]'>Send Massage</button>
@@ -35,7 +35,7 @@ const ChatDynamic = ({content,sender}) =>{
     return(
         <>
             {id==sender?
-                <div className=' bg-[#bfbfbf] w-100 ml-6 mr-14 mt-3 min-h-[50px] flex items-center'>
+                <div className=' bg-[#bfbfbf] w-100 ml-6 mr-14 mt-3 min-h-[50px] flex items-center h'>
                     <p className='m-3'>{content}</p>
                 </div>:
                 <div className=' bg-[#a3a2a2] mr-6 ml-14 mt-3 min-h-[50px] flex items-center'>
@@ -49,19 +49,25 @@ const ChatDynamic = ({content,sender}) =>{
 const WrapperDynamic = ({image,name,id,recepient,sender}) => {
     const auth = useSelector((state=>state.auth.id));
     const dispatch = useDispatch();
+    const clicked = (id,recepient,sender) =>{
+        const data = auth===sender? sender : recepient;
+            dispatch(costumeSelected(id));
+            dispatch(getChatting({id}));
+            dispatch(costumeRecepient(data))
+    }
     return(
         <>
-            <div onClick={()=>{dispatch(costumeSelected(id));auth==sender?dispatch(costumeRecepient(recepient)):dispatch(costumeRecepient(sender)); dispatch(getChatting({id}));}} className='p-11 flex items-center'>
+            <div onClick={()=>clicked(id,recepient,sender)} className='p-11 flex items-center'>
                 <div className=''>
                     <Image src={image?image:defaultimg} width={60} height={60} alt='profile'/>
                 </div>
-                <div className=' ml-5' onClick>
+                <div className=' ml-5'>
                     <p className='text-[24px] font-bold text-[#1A1A1A]'>{name}</p>
                     <p className='text-[16px] text-[#4D4D4D]'>isi chat terakhir</p>
                 </div>
             </div>
         </>
-    );
+    )
 };
 
 const Chats = () => {
@@ -93,24 +99,24 @@ const Chats = () => {
                                 console.log(val);
                                 return(
                                     <>
-                                        <WrapperDynamic image={val.image} name={val.full_name} id={val.id} sender={val.sender_id} recepient={val.recepient_id}/>;
+                                        <WrapperDynamic image={val.image} name={val.full_name} id={val.id} sender={val.sender_id} recepient={val.recepient_id}/>
                                     </>
-                                );
+                                )
                             })}
                         </div>
                         <div className='col-span-3 border border-[#D1D1D1]'>
                             <div className=' p-11 flex items-center  bg-[#1A1A1A]'>
                                 {/* User Tujuan yang udah di klik COY*/}
                                 <div className=''>
-                                    <Image src='/vercel.svg' width={60} height={60}  alt='profile'/>
+                                    <Image src={defaultimg} width={60} height={60}  alt='profile'/>
                                 </div>
                                 <div className=' ml-5'>
                                     <p className='text-[24px] font-bold text-[#FFFFFF]'>Aisyah 12</p>
                                     <p className='text-[16px] text-[#FFFFFF]' >online</p>
                                 </div>
                             </div>
-                            <div className='flex flex-col justify-between min-h-[630px]'>
-                                <div className=''>
+                            <div className='flex flex-col justify-between h-[630px]'>
+                                <div className='overflow-y-scroll'>
                                     {conversation&&conversation.map((val)=>{
                                         return(
                                             <>
@@ -121,7 +127,7 @@ const Chats = () => {
                                     
                                 </div>
                                 <div className='m-6'>
-                                    <Formik validationSchema={schemaChat} initialValues={{chats:''}} onSubmit={sendChat}>
+                                    <Formik validationSchema={schemaChat} initialValues={{chats:''}} onSubmit={(values,{resetForm})=>{sendChat(values); resetForm({values: ''})}}>
                                         {(props)=><FormChats{...props}/>}
                                     </Formik>
                                 </div>
