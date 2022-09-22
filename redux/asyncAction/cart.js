@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {http3} from '../../helpers/http3';
 
-
 export const getCart = createAsyncThunk('cart/getCart', async() => {
     const result = {};
     try {
@@ -12,3 +11,17 @@ export const getCart = createAsyncThunk('cart/getCart', async() => {
         return result;
     };
 });
+
+export const addToCart = createAsyncThunk('cart/addItem', async (request) => {
+    const result = {};
+    try{
+        const send = qs.stringify(request)
+        const {data} = await http3().post('/cart',send);
+        result.success = data.message;
+        return result;
+    }
+    catch(e){
+        result.error = data.message;
+        return result;
+    }
+})
