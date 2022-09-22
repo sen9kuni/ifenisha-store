@@ -14,7 +14,7 @@ export const chats = createSlice({
     name:'chats',
     initialState,
     reducers:{
-        resetmsg:(state)=>{
+        resetChatmsg:(state)=>{
             state.errormsg='';
             state.succesmsg='';
         },
@@ -59,5 +59,5 @@ export const chats = createSlice({
 });
 
 export {getAllChat,getChatting,sending,createChat};
-export const {resetmsg,costumeSelected,costumeRecepient} = chats.actions;
+export const {resetChatmsg,costumeSelected,costumeRecepient} = chats.actions;
 export default chats.reducer;

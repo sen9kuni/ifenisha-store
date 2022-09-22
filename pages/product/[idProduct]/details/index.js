@@ -20,10 +20,10 @@ import Router from 'next/router';
 import { http3 } from '../../../../helpers/http3';
 import cookies from 'next-cookies';
 import axiosApiIntances from '../../../../helpers/httpServer';
+import { resetChatmsg } from '../../../../redux/reducers/chats';
 
 export async function getServerSideProps(context){
     const DataCookies = cookies(context)
-    console.log(DataCookies);
     if (DataCookies.token) {
         try{
             const id = !context.query?.idProduct?'':context.query.idProduct;
@@ -41,7 +41,6 @@ export async function getServerSideProps(context){
             };
         }
         catch(err){
-            console.log(err);
             return {
                 props:{
                     isError:true
@@ -141,9 +140,10 @@ const BreadCumbProductDetail = () => {
 };
 
 function ProductDetail(props) {
-    console.log(props.dataProduct);
+    const idProduct = props.dataProduct[0].id;
     const dispatch = useDispatch();
     const product = props.dataProduct[0];
+    const token = useSelector(state=>state.auth.token);
     // console.log(product.product_images);
     const imagesProd = typeof(product.product_images);
     const imgList = imagesProd !== 'string'?[]:[product.product_images];
@@ -166,15 +166,28 @@ function ProductDetail(props) {
     const [paginate, setPaginate] = React.useState(0);
     const data = product.user_id;
     const request = {recepient:data};
-    const succesmsg = useSelector((state=>state.chats.succesmsg));
+    const succesChatmsg = useSelector((state=>state.chats.succesmsg));
     const chatSeller = () =>{
-        dispatch(createChat(request));
+        if(!token){
+            Router.push('/login')
+        } else {
+            dispatch(createChat(request));
+        }
+
     };
+    const addToCart = () => {
+        if(!token){
+            Router.push('/login')
+        } else {
+            dispatch
+        }
+    }
     React.useEffect(()=>{
-        if(succesmsg){
+        if(succesChatmsg){
+            dispatch(resetChatmsg());
             Router.push('/chats');
         }
-    },[succesmsg]);
+    },[succesChatmsg]);
     return (
         <>
             <Head>

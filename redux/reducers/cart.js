@@ -2,13 +2,20 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getCart } from '../asyncAction/cart';
 
 const initialState ={
-    results: {}
+    results: {},
+    successmsg: '',
+    errormsg: '',
 };
 
 const cart = createSlice({
     name: 'cart',
     initialState,
-    reducers: {},
+    reducers: {
+        resetCartMsg: (state) => {
+            state.successmsg = '';
+            state.errormsg = '';
+        }
+    },
     extraReducers: (build)=>{
         build.addCase(getCart.fulfilled, (state, action)=>{
             state.results = action.payload;
