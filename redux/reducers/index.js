@@ -11,6 +11,7 @@ import counter from './counter';
 import cart from './cart';
 import customer from './customer';
 import profileSeller from './profileSeller';
+import wishFav from './wishFav';
 
 
 const authPersistConfig = {
@@ -30,6 +31,7 @@ const reducer = combineReducers({
     product,
     cart: cart,
     profileSeller,
+    wishFav,
 });
 
 export default reducer;

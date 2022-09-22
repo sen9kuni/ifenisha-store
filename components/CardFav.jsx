@@ -2,16 +2,16 @@ import Image from 'next/image'
 import React from 'react'
 import { FiCheck, FiTrash2, FiX } from 'react-icons/fi'
 import { useDispatch } from 'react-redux'
-import { deleteWishFav, getAllWishFav } from '../redux/asyncAction/wishFav'
+import { getAllWishFav, updateFav } from '../redux/asyncAction/wishFav'
 
-export default function CardWishFav({image, nameProduct, stock, price, id}) {
+function CardFav({image, nameProduct, stock, price, id}) {
   const dispatch = useDispatch()
   const imageSrc = image?.split(',')[0]
 
   // delete from wishlist
   const onDelete = async (value) => {
     console.log(value);
-    await dispatch(deleteWishFav(value))
+    await dispatch(updateFav({is_favorite: false, id: value}))
     dispatch(getAllWishFav('1'))
   }
   return (
@@ -59,3 +59,5 @@ export default function CardWishFav({image, nameProduct, stock, price, id}) {
       </div>
   )
 }
+
+export default CardFav
