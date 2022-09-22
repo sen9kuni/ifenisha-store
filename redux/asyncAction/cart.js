@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {http3} from '../../helpers/http3';
+import qs from 'qs';
 
 export const getCart = createAsyncThunk('cart/getCart', async() => {
     const result = {};
@@ -24,4 +25,4 @@ export const addToCart = createAsyncThunk('cart/addItem', async (request) => {
         result.error = data.message;
         return result;
     }
-})
+});
