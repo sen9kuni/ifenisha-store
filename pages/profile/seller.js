@@ -164,7 +164,7 @@ function Seller() {
             <div>
                 <div className='flex flex-row p-5 mx-[150px] my-10 gap-4'>
                     <div>
-                        <Image src={dataSeller.image !== null ? dataSeller.image : '/images/default.jpg' }
+                        <Image src={dataSeller?.image !== null ? dataSeller?.image : '/images/default.jpg' }
                             width={60} 
                             height={60}
                             alt='photo profile'
@@ -174,7 +174,7 @@ function Seller() {
                     </div>
                     <div className='flex flex-col justify-center'>
                         <div className='flex items-center'>
-                            <span className='font-semibold text-xl'>{dataSeller.full_name !== null ? dataSeller.full_name : '-' }</span>
+                            <span className='font-semibold text-xl'>{dataSeller?.full_name !== null ? dataSeller?.full_name : '-' }</span>
                             <button onClick={() => {setShowModal(true); setShowIndex(0); dispatch(resetMsgSeller());}} className='flex flex-row items-center gap-1'>
                                 <FiEdit3 />
                             </button>
@@ -189,7 +189,7 @@ function Seller() {
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='text-base'>Gender</div>
-                            <div className='font-semibold text-xl'>{dataSeller.gender !== null ? dataSeller.gender : '-' }</div>
+                            <div className='font-semibold text-xl'>{dataSeller?.gender !== null ? dataSeller?.gender : '-' }</div>
                         </div>
                         {/* <div className='flex flex-row items-center gap-1'>
                             <Link href='#'><a className='font-semibold'>Edit</a></Link>
@@ -204,7 +204,7 @@ function Seller() {
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='text-base'>Your Email</div>
-                            <div className='font-semibold text-xl'>{dataSeller.email !== null ? dataSeller.email : '-' }</div>
+                            <div className='font-semibold text-xl'>{dataSeller?.email !== null ? dataSeller?.email : '-' }</div>
                         </div>
                         {/* <div className='flex flex-row items-center gap-1'>
                             <Link href='#'><a className='font-semibold'>Edit</a></Link>
@@ -219,7 +219,7 @@ function Seller() {
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='text-base'>Store Name</div>
-                            <div className='font-semibold text-xl'>{dataSeller.store_name !== null ? dataSeller.store_name : '-' }</div>
+                            <div className='font-semibold text-xl'>{dataSeller?.store_name !== null ? dataSeller?.store_name : '-' }</div>
                         </div>
                         <button onClick={() => {setShowModal(true); setShowIndex(3); dispatch(resetMsgSeller());}} className='flex flex-row items-center gap-1'>
                             {/* <Link href='#'><a className='font-semibold'>Edit</a></Link> */}
@@ -230,7 +230,7 @@ function Seller() {
                     <div className='flex flex-row justify-between border-4  px-10 py-2 mx-[150px]'>
                         <div className='flex flex-col '>
                             <div className='text-base'>Store Description</div>
-                            <div className='font-semibold text-xl'>{dataSeller.store_desc !== null ? dataSeller.store_desc : '-' }</div>
+                            <div className='font-semibold text-xl'>{dataSeller?.store_desc !== null ? dataSeller?.store_desc : '-' }</div>
                         </div>
                         <button onClick={() => {setShowModal(true); setShowIndex(4); dispatch(resetMsgSeller());}} className='flex flex-row items-center gap-1'>
                             {/* <Link href='#'><a className='font-semibold'>Edit</a></Link> */}
