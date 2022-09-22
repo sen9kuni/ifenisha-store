@@ -39,9 +39,9 @@ export default function Menu(){
                         order.active&&
                         <div style={{top: order.top, left: order.left}} className={`absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none`}>
                             <div className="py-1" role="none">
-                                <a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Account settings</a>
-                                <a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">Support</a>
-                                <a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-2">License</a>
+                                <Link href={'#'}><span className='text-gray-700 block px-4 py-2 text-sm cursor-pointer' role='menuitem' id='menu-item-0'>Account settings</span></Link>
+                                <Link href={'#'}><span className='text-gray-700 block px-4 py-2 text-sm cursor-pointer' role='menuitem' id='menu-item-1'>Support</span></Link>
+                                <Link href={'#'}><span className='text-gray-700 block px-4 py-2 text-sm cursor-pointer' role='menuitem' id='menu-item-2'>License</span></Link>
                             </div>
                         </div>
                     }
