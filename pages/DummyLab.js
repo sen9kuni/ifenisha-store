@@ -259,6 +259,7 @@ function DummyLab() {
     </div>
 
     <div className='w-full h-[700px] flex justify-center items-center flex-col mb-5'>
+      {/* title */}
       <div className='w-[1160px] h-[72px] bg-white mb-3 border-t-2 border-b-2 border-gray-600'>
         <div className='w-full h-full grid grid-cols-3'>
           <div className='w-full h-full grid grid-cols-1 items-center'>
@@ -277,6 +278,7 @@ function DummyLab() {
         </div>
       </div>
 
+        {/* card  wishlist & favorite */}
       <div className='w-[1160px] h-[172px] bg-white mb-3'>
         <div className='w-full h-full grid grid-cols-3'>
           <div className='col-span-1'>
@@ -375,6 +377,7 @@ function DummyLab() {
     </div>
 
     <div className='w-full h-[700px] flex justify-center items-center flex-col mb-5'>
+      {/* title */}
       <div className='w-[730px] h-[60px] bg-white mb-3'>
         <div className='w-full h-full grid grid-cols-10'>
           <div className='col-span-1' />
@@ -391,6 +394,7 @@ function DummyLab() {
         </div>
       </div>
 
+      {/* card  cart */}
       <div className='w-[730px] h-[83px] bg-white mb-3'>
         <div className='w-full h-full grid grid-cols-10'>
           <div className='col-span-1 flex justify-center items-center'>
