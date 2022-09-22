@@ -388,7 +388,7 @@ export const TableProduct = ({slug}) => {
                             <ModalProduct title={'Edit my product'} onHide={()=>setShowModal(false)} content={
                                 (
                                     <>
-                                        <Formik onSubmit={submitEditModal} initialValues={{nameProduct: productDetail[0]?.product_name, stock: productDetail[0]?.stock??0, price: productDetail[0]?.price??0, is_archive: productDetail[0]?.is_archive, discount: productDetail[0]?.discount}} validationSchema={editProductSchema}>
+                                        <Formik onSubmit={submitEditModal} initialValues={{nameProduct: productDetail[0]?.product_name, stock: productDetail[0]?.stock??0, price: productDetail[0]?.price??0, is_archive: productDetail[0]?.is_archive, discount: productDetail[0]?.discount??0}} validationSchema={editProductSchema}>
                                             {(props)=> <EditModalForm {...props}/>}
                                         </Formik>
                                     </>
