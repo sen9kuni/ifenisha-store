@@ -205,7 +205,7 @@ function ProductDetail(props) {
             </Head>
             <Header/>
             {succesCartmsg?
-                <div className="sticky top-0 z-50 h-10 w-auto p-4 mb-4 text-center text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+                <div className="sticky top-0 z-50 h-30 w-auto p-4 mb-4 text-center text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
                     <span className="font-bold text-2xl text-center">Item Added to cart</span>
                 </div>
             : null}

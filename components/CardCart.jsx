@@ -14,20 +14,20 @@ export default function CardCart({image, nameProduct, price, quantity, total}) {
             <div className='col-span-1'>
               <div className='w-full h-full grid grid-cols-3'>
                 <div className='h-full w-[69px] relative overflow-hidden'>
-                  <Image src={'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
+                  <Image src={image} objectFit='cover' layout='fill' alt='test' />
                 </div>
-                <div className='col-span-1 flex items-center w-full'><p className='text-lg truncate'>Dining Side Chair in Beige</p></div>
+                <div className='col-span-1 flex items-center w-full'><p className='text-lg truncate'>{nameProduct}</p></div>
               </div>
             </div>
             <div className='col-span-1'>
               <div className='w-full h-full flex flex-row justify-between items-center'>
-                <span className='text-base'>$10.50</span>
+                <span className='text-base'>{price}</span>
                 <div className='w-[100px] flex flex-row justify-between'>
                   <button><FiPlusCircle /></button>
-                  <span className='text-base'>02</span>
+                  <span className='text-base'>{quantity}</span>
                   <button><FiMinusCircle /></button>
                 </div>
-                <span className='font-bold'>$21.00</span>
+                <span className='font-bold'>{total}</span>
               </div>
             </div>
           </div>

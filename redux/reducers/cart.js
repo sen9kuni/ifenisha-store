@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getCart,addToCart } from '../asyncAction/cart';
 
 const initialState ={
-    results: {},
+    results: '',
     successmsg: '',
     errormsg: '',
 };
@@ -17,8 +17,12 @@ const cart = createSlice({
         }
     },
     extraReducers: (build)=>{
+        build.addCase(getCart.pending,(state)=>{
+            state.results = '';
+        });
         build.addCase(getCart.fulfilled,(state,action)=>{
-            state.results = action.payload;
+            state.results = action.payload?.value;
+            state.errormsg = action.payload?.error;
         });
         build.addCase(addToCart.pending,(state)=>{
             state.successmsg = '';
