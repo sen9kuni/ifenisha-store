@@ -24,6 +24,7 @@ import { resetChatmsg } from '../../../../redux/reducers/chats';
 import { addToCart } from '../../../../redux/asyncAction/cart';
 import { decrement, increment, resetCounter } from '../../../../redux/reducers/counter';
 import { resetCartMsg } from '../../../../redux/reducers/cart';
+import { createWishFav, deleteWishFav, getInfoWish, recoverWishFav, updateFav } from '../../../../redux/asyncAction/wishFav';
 
 export async function getServerSideProps(context){
     const DataCookies = cookies(context)
@@ -144,9 +145,13 @@ const BreadCumbProductDetail = () => {
 
 function ProductDetail(props) {
     const dispatch = useDispatch();
+    // console.log(props.dataProduct);
     const idProduct = props.dataProduct[0].id;
+    const idSeller = props.dataProduct[0].user_id;
     const product = props.dataProduct[0];
+    // const stock = parseInt(props.dataProduct[0].stock, 10);
     const token = useSelector(state=>state.auth.token);
+    const idUser = useSelector(state=>state.auth.id);
     const counter = useSelector(state => state.counter.num);
     // console.log(product.product_images);
     const imagesProd = typeof(product.product_images);
@@ -167,10 +172,59 @@ function ProductDetail(props) {
     const menuTab = ['Description', 'Review', 'Additional Information', 'About Brand', 'Shipping & Delivery'];
     const [tabActive, setTabActive] = React.useState(0);
     const [paginate, setPaginate] = React.useState(0);
+    const [notifWishCreate, setNotifWishCreate] = React.useState(false);
+    const [notifWishDelete, setNotifWishDelete] = React.useState(false);
+    const [notifFavCreate, setNotifFavCreate] = React.useState(false);
+    const [notifFavDelete, setNotifFavDelete] = React.useState(false);
     const data = product.user_id;
     const succesChatmsg = useSelector((state=>state.chats.successmsg));
     const succesCartmsg = useSelector((state=>state.cart.successmsg));
-    console.log(succesCartmsg);
+    const infoWishProduct = useSelector((state=>state.wishFav.infoWishProduct));
+    const successMsgWish = useSelector((state=>state.wishFav.successMsg));
+
+    const onAddWishlist = async () => {
+        if (infoWishProduct?.is_deleted === true) {
+            await dispatch(createWishFav({product_id: idProduct, is_favorite: true}))
+            dispatch(getInfoWish(idProduct))
+            setNotifWishCreate(true)
+            setTimeout(() => {
+                setNotifWishCreate(false)
+            }, 2000);
+        } else {
+            await dispatch(deleteWishFav(parseInt(infoWishProduct.id, 10)))
+            dispatch(getInfoWish(idProduct))
+            setNotifWishDelete(true)
+            setTimeout(() => {
+                setNotifWishDelete(false)
+            }, 2000);
+        }
+    }
+
+    const onFavorite = async () => {
+        if (infoWishProduct.is_favorite === false) {
+            await dispatch(updateFav({is_favorite: true, id: infoWishProduct.id}))
+            dispatch(getInfoWish(idProduct))
+            setNotifFavCreate(true)
+            setTimeout(() => {
+                setNotifFavCreate(false)
+            }, 2000);
+        } else if(infoWishProduct.is_favorite === true){
+            await dispatch(updateFav({is_favorite: false, id: infoWishProduct.id}))
+            dispatch(getInfoWish(idProduct))
+            setNotifFavDelete(true)
+            setTimeout(() => {
+                setNotifFavDelete(false)
+            }, 2000);
+        } else {
+            await dispatch(createWishFav({product_id: idProduct, is_favorite: true}))
+            dispatch(getInfoWish(idProduct))
+            setNotifWishCreate(true)
+            setTimeout(() => {
+                setNotifWishCreate(false)
+            }, 2000);
+        }
+    }
+    
     const chatSeller = () =>{
         if(!token){
             Router.push('/login')
@@ -197,7 +251,11 @@ function ProductDetail(props) {
             dispatch(resetChatmsg());
             Router.push('/chats');
         }
-    },[succesChatmsg,succesCartmsg]);
+
+        if (token !== null || token !== undefined) {
+            dispatch(getInfoWish(idProduct))
+        }
+    },[succesChatmsg,succesCartmsg, dispatch]);
     return (
         <>
             <Head>
@@ -207,6 +265,24 @@ function ProductDetail(props) {
             {succesCartmsg?
                 <div className="sticky top-0 z-50 h-30 w-auto p-4 mb-4 text-center text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
                     <span className="font-bold text-2xl text-center">Item Added to cart</span>
+                </div>
+            : null}
+            
+            {notifWishCreate ?
+                <div className="sticky top-0 z-50 h-30 w-auto p-4 mb-4 text-center text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+                    <span className="font-bold text-2xl text-center">Item Added to Wishlist and Favorite </span>
+                </div>
+            : notifFavCreate ?
+                <div className="sticky top-0 z-50 h-30 w-auto p-4 mb-4 text-center text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+                    <span className="font-bold text-2xl text-center">Item Added to Favorite </span>
+                </div>
+            : notifWishDelete ? 
+                <div className="sticky top-0 z-50 h-30 w-auto p-4 mb-4 text-center text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+                    <span className="font-bold text-2xl text-center">Item   Remove from Wishlist and Favorite </span>
+                </div>
+            : notifFavDelete ? 
+                <div className="sticky top-0 z-50 h-30 w-auto p-4 mb-4 text-center text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+                    <span className="font-bold text-2xl text-center">Item Remove from Favorite </span>
                 </div>
             : null}
             <section>
@@ -276,31 +352,31 @@ function ProductDetail(props) {
                         <div className='text-base'>
                             <span>{product.description}</span>
                         </div>
-                        <div className='flex gap-3 my-7'>
+                        { idUser !== idSeller && <div className='flex gap-3 my-7'>
                             <div className='p-4 border border-gray-400 flex items-center gap-4 rounded-sm shadow-md'>
-                                <div className='cursor-pointer text-black'>
-                                    <FiMinus onClick={()=>dispatch(decrement())} />
+                                <div className={counter >= 1 ? 'cursor-pointer text-black' : 'text-black' }>
+                                    <FiMinus onClick={()=> counter >= 1 && dispatch(decrement())} />
                                 </div>
                                 <span className='text-black font-semibold'>{counter}</span>
-                                <div className='cursor-pointer text-black'>
-                                    <FiPlus onClick={()=>dispatch(increment())} />
+                                <div className={counter !== parseInt(product.stock, 10) ? 'cursor-pointer text-black' : 'text-black' }>
+                                    <FiPlus onClick={()=> counter !== parseInt(product.stock, 10) && dispatch(increment())} />
                                 </div>
                             </div>
-                            <button onClick={()=>addToCartBtn()} className='bg-black px-7 rounded-sm shadow-md hover:bg-gray-900'>
+                            <button disabled={parseInt(product.stock, 10) === 0 || counter === 0} onClick={()=>addToCartBtn()} className='bg-black px-7 rounded-sm shadow-md hover:bg-gray-900 disabled:bg-slate-500'>
                                 <span className='text-white font-semibold'>Add to cart</span>
                             </button>
-                            <button className='bg-black px-7 rounded-sm shadow-md hover:bg-gray-900'>
+                            <button  disabled={token === null || token === undefined} onClick={() => onFavorite()} className={infoWishProduct?.is_favorite === true ? 'bg-red-500 px-7 rounded-sm shadow-md hover:bg-red-600 disabled:bg-gray-400' : 'bg-black px-7 rounded-sm shadow-md hover:bg-gray-900 disabled:bg-gray-400'}>
                                 <div className='text-white'>
                                     <BsHeart size={24}/>
                                 </div>
                             </button>
-                            <button className='border border-gray-400 px-7 rounded-sm shadow-md hover:border-gray-800'>
-                                <span className='text-black font-semibold'>Add to wishlist</span>
+                            <button disabled={token === null || token === undefined} onClick={() => onAddWishlist()} className='border border-gray-400 px-7 rounded-sm shadow-md hover:border-gray-800 disabled:bg-slate-500'>
+                                <span className='text-black font-semibold'>{infoWishProduct?.is_deleted === true ? 'Add to wishlist' : infoWishProduct?.is_deleted === false ? 'Remove from Wishlist' : 'login dulu' }</span>
                             </button>
                             <button onClick={()=>chatSeller()} className='border border-gray-400 px-7 rounded-sm shadow-md hover:border-gray-800'>
                                 <span className='text-black font-semibold'>Chat Seller</span>
                             </button>
-                        </div>
+                        </div>}
                         <div className='flex flex-col text-xs gap-4'>
                             <span>SKU:{product.sku}</span>
                             <span>Categories:{product.categories.category_name} </span>
