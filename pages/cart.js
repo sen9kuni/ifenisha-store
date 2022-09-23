@@ -15,9 +15,20 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart } from "../redux/asyncAction/cart";
 import Banner from "../components/Banner";
+import Router from "next/router";
+import CardCart from "../components/CardCart";
 
 const Cart = () => {
+  const dispatch = useDispatch();
+  const token = useSelector(state=>state.auth.token);
+  const value = useSelector( state => state.cart.results );
   const [chooseShipping, setChooseShipping] = React.useState(0);
+  if(!token){
+    Router.push('/login')
+  }
+  React.useEffect(()=>{
+    dispatch(getCart());
+  },[])
   return (
     <>
       <Header />
@@ -47,149 +58,13 @@ const Cart = () => {
                 </div>
               </div>
             </div>
-
-            {/* card  cart */}
-            <div className="w-[730px] h-[83px] bg-white mb-3">
-              <div className="w-full h-full grid grid-cols-10">
-                <div className="col-span-1 flex justify-center items-center">
-                  <button className="h-[20px] w-[20px] bg-red-600 mr-1 font-bold text-white flex justify-center items-center hover:bg-red-500">
-                    <FiX size={15} />
-                  </button>
-                </div>
-
-                <div className="col-span-9 w-full h-full grid grid-cols-2">
-                  <div className="col-span-1">
-                    <div className="w-full h-full grid grid-cols-3">
-                      <div className="h-full w-[69px] relative overflow-hidden">
-                        <Image
-                          src={
-                            "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
-                          }
-                          objectFit="cover"
-                          layout="fill"
-                          alt="test"
-                        />
-                      </div>
-                      <div className="col-span-1 flex items-center w-full">
-                        <p className="text-lg truncate">
-                          Dining Side Chair in Beige
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-span-1">
-                    <div className="w-full h-full flex flex-row justify-between items-center">
-                      <span className="text-base">$10.50</span>
-                      <div className="w-[100px] flex flex-row justify-between">
-                        <button>
-                          <FiPlusCircle />
-                        </button>
-                        <span className="text-base">02</span>
-                        <button>
-                          <FiMinusCircle />
-                        </button>
-                      </div>
-                      <span className="font-bold">$21.00</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-[730px] h-[83px] bg-white mb-3">
-              <div className="w-full h-full grid grid-cols-10">
-                <div className="col-span-1 flex justify-center items-center">
-                  <button className="h-[20px] w-[20px] bg-red-600 mr-1 font-bold text-white flex justify-center items-center hover:bg-red-500">
-                    <FiX size={15} />
-                  </button>
-                </div>
-
-                <div className="col-span-9 w-full h-full grid grid-cols-2">
-                  <div className="col-span-1">
-                    <div className="w-full h-full grid grid-cols-3">
-                      <div className="h-full w-[69px] relative overflow-hidden">
-                        <Image
-                          src={
-                            "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
-                          }
-                          objectFit="cover"
-                          layout="fill"
-                          alt="test"
-                        />
-                      </div>
-                      <div className="col-span-1 flex items-center w-full">
-                        <p className="text-lg truncate">
-                          Dining Side Chair in Beige
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-span-1">
-                    <div className="w-full h-full flex flex-row justify-between items-center">
-                      <span className="text-base">$10.50</span>
-                      <div className="w-[100px] flex flex-row justify-between">
-                        <button>
-                          <FiPlusCircle />
-                        </button>
-                        <span className="text-base">02</span>
-                        <button>
-                          <FiMinusCircle />
-                        </button>
-                      </div>
-                      <span className="font-bold">$21.00</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-[730px] h-[83px] bg-white mb-3">
-              <div className="w-full h-full grid grid-cols-10">
-                <div className="col-span-1 flex justify-center items-center">
-                  <button className="h-[20px] w-[20px] bg-red-600 mr-1 font-bold text-white flex justify-center items-center hover:bg-red-500">
-                    <FiX size={15} />
-                  </button>
-                </div>
-
-                <div className="col-span-9 w-full h-full grid grid-cols-2">
-                  <div className="col-span-1">
-                    <div className="w-full h-full grid grid-cols-3">
-                      <div className="h-full w-[69px] relative overflow-hidden">
-                        <Image
-                          src={
-                            "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
-                          }
-                          objectFit="cover"
-                          layout="fill"
-                          alt="test"
-                        />
-                      </div>
-                      <div className="col-span-1 flex items-center w-full">
-                        <p className="text-lg truncate">
-                          Dining Side Chair in Beige
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-span-1">
-                    <div className="w-full h-full flex flex-row justify-between items-center">
-                      <span className="text-base">$10.50</span>
-                      <div className="w-[100px] flex flex-row justify-between">
-                        <button>
-                          <FiPlusCircle />
-                        </button>
-                        <span className="text-base">02</span>
-                        <button>
-                          <FiMinusCircle />
-                        </button>
-                      </div>
-                      <span className="font-bold">$21.00</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          {value&&value.map((val)=>{
+            return(
+              <>
+                <CardCart image={val.product.product_image} nameProduct={val.product.product_name} price={val.product.price} quantity={val.quantity} total={val.total_price} />
+              </>
+            )
+          })}
             <div className="w-[730px] h-[70px] bg-white border-t-2 border-slate-300 flex items-end pb-2">
               <div className="w-full grid grid-cols-2">
                 <div className="col-span-1 w-full flex flex-row justify-between border-b-2 border-slate-300">
