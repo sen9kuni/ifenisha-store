@@ -27,9 +27,6 @@ export default function Register(){
         const request = {email,password,role};
         if(!error){
             dispatch(register(request));
-            console.log('aman');
-        }else{
-            console.log('masih error');
         }
     };
     React.useEffect(()=>{
@@ -76,7 +73,7 @@ export default function Register(){
                                     </div>
                                     <div className='flex gap-5'>
                                         <div className='flex items-center gap-1'>
-                                            <input className='' type='radio' name='role' value='Customer' checked onChange={props.handleChange} />
+                                            <input className='' type='radio' name='role' value='Customer' onChange={props.handleChange} />
                                             <span className='text-sm'>I’m Customer</span>
                                         </div>
                                         <div className='flex items-center gap-1'>

@@ -108,7 +108,7 @@ export default function Header(){
                                     <div className='py-1' role='none'>
                                         <Link href={'/notification'}><span className='text-gray-700 px-4 py-2 text-sm cursor-pointer flex' role='menuitem' id='menu-item-0'>Notification</span></Link>
                                         <Link href={'/chats'}><span className='text-gray-700 px-4 py-2 text-sm cursor-pointer flex' role='menuitem' id='menu-item-1'>Chats</span></Link>
-                                        <Link href={`/profile/${role==='seller'?'seller':'customer'}`}><a className='text-gray-700 px-4 py-2 text-sm cursor-pointer flex' role='menuitem' id='menu-item-2'>Profile</a></Link>
+                                        <Link href={`/profile/${role==='Seller'?'seller':'customer'}`}><a className='text-gray-700 px-4 py-2 text-sm cursor-pointer flex' role='menuitem' id='menu-item-2'>Profile</a></Link>
                                         <button className='text-gray-700 px-4 py-2 text-sm cursor-pointer flex' role='menuitem' id='menu-item-3' onClick={() => {dispatch(logOut());router.push('/');}}>Logout</button>
                                     </div>
                                 </div>
