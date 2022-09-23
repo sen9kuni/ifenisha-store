@@ -3,7 +3,7 @@ import Footer from '../components/Footer';
 import { BiCheckCircle } from 'react-icons/bi';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiCheck, FiTrash2 } from 'react-icons/fi';
+import { FiAlertOctagon, FiCheck, FiTrash2 } from 'react-icons/fi';
 import CardWishFav from '../components/CardWishFav';
 import { useDispatch, useSelector } from 'react-redux';
 import React from 'react';
@@ -95,9 +95,18 @@ export default function Wishlist(){
                     </div>
 
                     {/* card  wishlist & favorite */}
-                    {resultWish.map((e) => {
-                        return <CardWishFav key={e.id + e.created_at} id={e.id} image={e.products.product_images} nameProduct={e.products.product_name} stock={parseInt(e.products.stock, 10)} price={parseInt(e.products.price, 10)} />
-                    })}
+                    {resultWish ? resultWish?.map((e) => {
+                        return e.is_deleted === false ? <CardWishFav key={e.id + e.created_at} id={e.id} image={e.products.product_images} nameProduct={e.products.product_name} stock={parseInt(e.products.stock, 10)} price={parseInt(e.products.price, 10)} /> : 
+                        <div className='w-full h-[350px] flex justify-center items-center flex-col border-4 border-black'>
+                        <FiAlertOctagon className='mb-3' size={70} />
+                        <span className='font-bold text-2xl'>Your Wishlist is Empty</span>
+                    </div>
+                    }) : (
+                        <div className='w-full h-[350px] flex justify-center items-center flex-col border-4 border-black'>
+                            <FiAlertOctagon className='mb-3' size={70} />
+                            <span className='font-bold text-2xl'>Your Wishlist is Empty</span>
+                        </div>
+                    )}
                 </div>
                 <div className='px-[140px] h-[50px] mt-2 mb-3 flex justify-center'>
                     <div className='w-[500px] h-full  grid grid-cols-3'>

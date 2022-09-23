@@ -54,3 +54,15 @@ export const updateFav = createAsyncThunk('wih-fav/update-fav', async (param) =>
     return result;
   }
 })
+
+// check apa product masuk wishlist
+export const getInfoWish = createAsyncThunk('wish-fav/info-wishfav', async (param) => {
+  const result = {}
+  try {
+    const {data} = await http3().get(`wishlist/${param}`)
+    return data
+  } catch (e) {
+    result.errorMsg = e.response.data?.message;
+    return result;
+  }
+})

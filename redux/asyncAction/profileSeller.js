@@ -17,28 +17,28 @@ export const getProfileSeller = createAsyncThunk('seller/profile', async () => {
 })
 
 export const editProfileSeller = createAsyncThunk('seller/edit-profile', async param => {
-  const results = {}
+  const result = {}
   try {
     const send = qs.stringify(param)
     const {data} = await http3().patch('/authenticated-seller/profile/seller', send)
-    results.success = data.message;
-    return results;
+    result.successMsg = data.message;
+    return result;
   } catch (e) {
-    results.error = e.response.data.message;
-    return results;
+    result.error = e.response.data.message;
+    return result;
   }
 })
 
 export const editEmailSeller = createAsyncThunk('seller/edit-email', async param => {
-  const results = {}
+  const result = {}
   try {
     const send = qs.stringify(param)
     const {data} = await http3().patch('/authenticated-seller/profile/email', send)
-    results.success = data.message;
-    return results;
+    result.successMsg = data.message;
+    return result;
   } catch (e) {
-    results.errorMsg = e.response.data.message;
-    return results;
+    result.errorMsg = e.response.data.message;
+    return result;
   }
 })
 
@@ -48,7 +48,8 @@ export const editImageSeller = createAsyncThunk('seller/edit-image', async param
     const file = new FormData()
     file.append('images', param.file)
     const {data} = await http3().patch('/authenticated-seller/profile/seller', file);
-    return data;
+    // return data;
+    result.successMsg = data.message;
   } catch (e) {
     result.errorMsg = e.response.data.message;
     return result;

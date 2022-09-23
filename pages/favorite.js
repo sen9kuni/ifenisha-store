@@ -4,7 +4,7 @@ import { BiCheckCircle } from 'react-icons/bi';
 import { FaHeart } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiCheck, FiTrash2 } from 'react-icons/fi';
+import { FiAlertOctagon, FiCheck, FiTrash2 } from 'react-icons/fi';
 import CardWishFav from '../components/CardWishFav';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllWishFav } from '../redux/asyncAction/wishFav';
@@ -97,9 +97,14 @@ export default function Wishlist(){
                     </div>
 
                 {/* card  wishlist & favorite */}
-                {resultWish.map((e) => {
+                {resultWish ? resultWish?.map((e) => {
                     return e.is_favorite === true && <CardFav key={e.id + e.created_at} id={e.id} image={e.products.product_images} nameProduct={e.products.product_name} stock={parseInt(e.products.stock, 10)} price={parseInt(e.products.price, 10)} />
-                })}
+                }) : (
+                    <div className='w-full h-[350px] flex justify-center items-center flex-col border-4 border-black'>
+                        <FiAlertOctagon className='mb-3' size={70} />
+                        <span className='font-bold text-2xl'>Your Favorite is Empty</span>
+                    </div>
+                )}
                 {/* <CardWishFav />
                 <CardWishFav />
                 <CardWishFav />

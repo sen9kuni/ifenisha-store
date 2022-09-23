@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createWishFav, deleteWishFav, getAllWishFav, updateFav } from '../asyncAction/wishFav';
+import { createWishFav, deleteWishFav, getAllWishFav, getInfoWish, recoverWishFav, updateFav } from '../asyncAction/wishFav';
 
 const initialState = {
   result: [],
   successMsg: '',
   errorMsg: '',
+  infoWishProduct: [],
 }
 
 const wishFav = createSlice({
@@ -50,8 +51,18 @@ const wishFav = createSlice({
       state.successMsg = action.payload.successMsg
       state.errorMsg = action.payload.errorMsg
     })
+
+    // build.addCase(getInfoWish.pending, (state) => {
+    //   state.errorMsg = null
+    //   state.successMsg = null
+    // })
+    build.addCase(getInfoWish.fulfilled, (state, action) => {
+      // state.successMsg = action.payload.message
+      state.infoWishProduct = action.payload.result
+      state.errorMsg = action.payload.errorMsg
+    })
   }
 })
 
-export {getAllWishFav, createWishFav, deleteWishFav, updateFav}
+export {getAllWishFav, createWishFav, deleteWishFav, updateFav, getInfoWish}
 export default wishFav.reducer

@@ -22,7 +22,7 @@ export const profileSeller = createSlice({
       state.errorMsg = null
     })
     build.addCase(getProfileSeller.fulfilled, (state, action) => {
-      state.successMsg = action.payload.message
+      state.successMsg = action.payload.successMsg
       state.errorMsg = action.payload.errorMsg
       state.dataSeller = action.payload.result
     })
@@ -32,7 +32,7 @@ export const profileSeller = createSlice({
       state.errorMsg = null
     })
     build.addCase(editProfileSeller.fulfilled, (state, action) => {
-      state.successMsg = action.payload.message
+      state.successMsg = action.payload.successMsg
       state.errorMsg = action.payload.errorMsg
     })
 
@@ -41,7 +41,7 @@ export const profileSeller = createSlice({
       state.errorMsg = null
     })
     build.addCase(editEmailSeller.fulfilled, (state, action) => {
-      state.successMsg = action.payload.message
+      state.successMsg = action.payload.successMsg
       state.errorMsg = action.payload.errorMsg
     })
   }
