@@ -220,7 +220,7 @@ const Cart = () => {
         <div className="col-span-4 bg-gray-100 ">
           <div className="grid grid-flow-row grid-rows-6 h-full">
             <div className="row-span-5 p-5 mb-5">
-                <div className="flex flex-col gap-10">
+                <div className="flex flex-col gap-14">
                     <span className="font-bold">Cart Total</span>
                     <div className="flex justify-between">
                         <span className="font-bold">Subtotal</span>
@@ -228,7 +228,7 @@ const Cart = () => {
                     </div>
                     <div className="flex justify-between items-start">
                         <span className="font-bold">Shipping</span>
-                        <div className="flex flex-col w-2/5 gap-2">
+                        <div className="flex flex-col w-2/5 gap-5">
                           <div className="flex justify-between items-center">
                             <div className="border-2 border-gray-500 rounded-full p-2 cursor-pointer shadow-none" onClick={()=>setChooseShipping(0)}>
                                 {chooseShipping === 0 ? <div className="p-1 bg-red-600 rounded-full" /> : <div className="p-1 bg-transparent rounded-full" />}

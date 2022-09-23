@@ -206,29 +206,11 @@ function ProductDetail(props) {
             <Header/>
             {succesCartmsg?
                 <div className="sticky top-0 z-50 h-10 w-auto p-4 mb-4 text-center text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
-                    <span className="font-bold text-2xl text-center">Item Added to cart</span>
+                    <span className="font-bold text-2xl text-center">{succesCartmsg}</span>
                 </div>
             : null}
             <section>
                 <BreadCumbProductDetail/>
-
-                {/* <div className='grid grid-cols-12 mx-20'>
-                    <div className='col-start-1 col-end-3'>
-                        {imgList.map(e=>{
-                            return(
-                                <>
-                                    <div className='w-28 cursor-pointer mb-5' onClick={()=>setChooseItem(e)}>
-                                        <Image width={100} height={100} src={e} alt='dummy'/>
-                                    </div>
-                                </>
-                            );
-                        })}
-                    </div>
-                    <div className='col-start-3 col-end-13'>
-                        <Image src={chooseItem} alt='dummy' width={1250} height={670}/>
-                    </div>
-                </div> */}
-                
                 <div className='mx-20'>
                     <div className='w-full h-[805px] grid grid-cols-5'>
                         <div className='col-span-1 grid content-center gap-2'>
@@ -278,8 +260,8 @@ function ProductDetail(props) {
                         </div>
                         <div className='flex gap-3 my-7'>
                             <div className='p-4 border border-gray-400 flex items-center gap-4 rounded-sm shadow-md'>
-                                <div className='cursor-pointer text-black'>
-                                    <FiMinus onClick={()=>dispatch(decrement())} />
+                                <div className={`${counter > 0 ? 'cursor-pointer' : ''} text-black`}>
+                                    <FiMinus onClick={()=> counter > 0 ? dispatch(decrement()) : null} />
                                 </div>
                                 <span className='text-black font-semibold'>{counter}</span>
                                 <div className='cursor-pointer text-black'>
