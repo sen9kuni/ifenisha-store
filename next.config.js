@@ -3,7 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   env:{
-      BACK_END_URL:'https://parabot-backend.vercel.app'
+    //   BACK_END_URL:'https://parabot-backend.vercel.app'
+    //   BACK_END_URL:'https://parabot-server.vercel.app'
+      BACK_END_URL:'http://localhost:3335'
   },
 
   images: {
