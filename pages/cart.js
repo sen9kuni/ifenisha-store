@@ -13,265 +13,166 @@ import { connect } from "react-redux";
 import { decrement, increment } from "../redux/reducers/counter";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart } from "../redux/asyncAction/cart";
+import { deleteCart, getCart } from "../redux/asyncAction/cart";
 import Banner from "../components/Banner";
 import Router from "next/router";
 import CardCart from "../components/CardCart";
+import { convertMoney } from "./profile/add-product";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const token = useSelector(state=>state.auth.token);
-  const value = useSelector( state => state.cart.results );
+  const cart = useSelector( state => state.cart.results);
+  const successMsg = useSelector(state => state.cart.successUpdateMsg);
+  const errorMsg = useSelector(state => state.cart.errorUpdateMsg);
+  const subTotalPrice = useSelector(state => state.cart.subTotalPrice);
   const [chooseShipping, setChooseShipping] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
+  // console.log(subTotalPrice)
+  const onNavigateToCheckout = () => {
+    console.log()
+  }
   if(!token){
     Router.push('/login')
   }
   React.useEffect(()=>{
     dispatch(getCart());
-  },[])
+    setLoading(true);
+    setTimeout(()=>{
+        setLoading(false);
+    }, 1000);
+  },[dispatch])
+  React.useEffect(()=>{
+    if(errorMsg == null && successMsg != null){
+      dispatch(getCart());
+      setLoading(true);
+      setTimeout(()=>{
+          setLoading(false);
+      }, 1000);
+    }
+  },[dispatch, errorMsg, successMsg])
   return (
     <>
-      <Header />
-      <Banner
-        basePath={"Cart"}
-        basePathUrl={"/cart"}
-        targetPath={"."}
-        titleBanner={"Your Cart"}
-        subtitleBanner={"Buy everything in your cart now!"}
-      />
-      <div className="grid grid-cols-12 px-[80px] my-20">
-        <div className="col-span-8">
-          <div className="w-full flex justify-start items-center flex-col mb-5">
-            {/* title */}
-            <div className="w-[730px] h-[60px] bg-white mb-3">
-              <div className="w-full h-full grid grid-cols-10">
-                <div className="col-span-1" />
-                <div className="col-span-9 w-full h-full grid grid-cols-2 items-center">
-                  <div className="col-span-1">
-                    <span className="text-base text-slate-500">PRODUCTS</span>
-                  </div>
-                  <div className="col-span-1 flex flex-row justify-between">
-                    <span className="text-base text-slate-500">PRICE</span>
-                    <span className="text-base text-slate-500">QUANTITY</span>
-                    <span className="text-base text-slate-500">TOTAL</span>
+    {!cart && loading ? 
+      <div className='text-center min-h-screen flex justify-center items-center'>
+          <div role='status '>
+              <svg className='inline mr-2 w-20 h-20 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600' viewBox='0 0 100 101' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                  <path d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z' fill='currentColor'/>
+                  <path d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z' fill='currentFill'/>
+              </svg>
+              <span className='sr-only'>Loading...</span>
+          </div>
+      </div> : <>
+        <Header />
+        <Banner
+          basePath={"Cart"}
+          basePathUrl={"/cart"}
+          targetPath={"."}
+          titleBanner={"Your Cart"}
+          subtitleBanner={"Buy everything in your cart now!"}
+        />
+        <div className="grid grid-cols-12 px-[80px] my-20">
+          <div className="col-span-8">
+            <div className="w-full flex justify-start items-center flex-col mb-5">
+              {/* title */}
+              <div className="w-[730px] h-[60px] bg-white mb-3">
+                <div className="w-full h-full grid grid-cols-10">
+                  <div className="col-span-1" />
+                  <div className="col-span-9 w-full h-full grid grid-cols-2 items-center">
+                    <div className="col-span-1">
+                      <span className="text-base text-slate-500">PRODUCTS</span>
+                    </div>
+                    <div className="col-span-1 flex flex-row justify-between">
+                      <span className="text-base text-slate-500">PRICE</span>
+                      <span className="text-base text-slate-500">QUANTITY</span>
+                      <span className="text-base text-slate-500">TOTAL</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          {value&&value.map((val)=>{
-            return(
-              <>
-                <CardCart image={val.product.product_image} nameProduct={val.product.product_name} price={val.product.price} quantity={val.quantity} total={val.total_price} />
-              </>
-            )
-          })}
-            <div className="w-[730px] h-[70px] bg-white border-t-2 border-slate-300 flex items-end pb-2">
-              <div className="w-full grid grid-cols-2">
-                <div className="col-span-1 w-full flex flex-row justify-between border-b-2 border-slate-300">
-                  <input
-                    class="appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-                    type="text"
-                    placeholder="Enter your coupon code"
-                  />
-                  <button className="font-bold">Apply Coupon</button>
-                </div>
-                <div className="col-span-1 w-full flex items-center">
-                  <div className="w-full grid grid-cols-2">
-                    <div className="col-span-1" />
-                    <div className="col-span-1 w-full flex flex-row justify-end">
-                      <button className="mr-5 text-base text-slate-300">
-                        Clear Cart
-                      </button>
-                      <button className="font-bold text-black">
-                        Update Cart
-                      </button>
+            {cart ? cart.map((e, i)=>{
+              return(
+                <>
+                  <CardCart id={e.id} product_id={e.product_id} onClick={()=>dispatch(deleteCart(e.id))} image={e.products.product_images.split(',')[0]} nameProduct={e.products.product_name} price={e.products.price} quantity={e.quantity} total={e.total_price} />
+                </>
+              )
+            }) : <div className="min-h-[300px] flex justify-center items-center text-2xl font-semibold">
+                <span>You don&apos;t have any cart list</span>
+              </div>}
+              <div className="w-[730px] h-[70px] bg-white border-t-2 border-slate-300 flex items-end pb-2">
+                <div className="w-full grid grid-cols-2">
+                  <div className="col-span-1 w-full flex flex-row justify-between border-b-2 border-slate-300">
+                    <input
+                      class="appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                      type="text"
+                      placeholder="Enter your coupon code"
+                    />
+                    <button className="font-bold">Apply Coupon</button>
+                  </div>
+                  <div className="col-span-1 w-full flex items-center">
+                    <div className="w-full grid grid-cols-2">
+                      <div className="col-span-1" />
+                      <div className="col-span-1 w-full flex flex-row justify-end">
+                        <button className="mr-5 text-base text-black">
+                          Clear Cart
+                        </button>
+                        {/* <button className="font-bold text-black">
+                          Update Cart
+                        </button> */}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="col-span-4 bg-gray-100 ">
-          <div className="grid grid-flow-row grid-rows-6 h-full">
-            <div className="row-span-5 p-5 mb-5">
-                <div className="flex flex-col gap-10">
-                    <span className="font-bold">Cart Total</span>
-                    <div className="flex justify-between">
-                        <span className="font-bold">Subtotal</span>
-                        <span className="font-bold">$124</span>
-                    </div>
-                    <div className="flex justify-between items-start">
-                        <span className="font-bold">Shipping</span>
-                        <div className="flex flex-col w-2/5 gap-2">
-                          <div className="flex justify-between items-center">
-                            <div className="border-2 border-gray-500 rounded-full p-2 cursor-pointer shadow-none" onClick={()=>setChooseShipping(0)}>
-                                {chooseShipping === 0 ? <div className="p-1 bg-red-600 rounded-full" /> : <div className="p-1 bg-transparent rounded-full" />}
+          <div className="col-span-4 bg-gray-100 ">
+            <div className="grid grid-flow-row grid-rows-6 h-full">
+              <div className="row-span-5 p-5 mb-5">
+                  <div className="flex flex-col gap-10">
+                      <span className="font-bold">Cart Total</span>
+                      <div className="flex justify-between">
+                          <span className="font-bold">Subtotal</span>
+                          <span className="font-bold">{convertMoney(subTotalPrice)}</span>
+                      </div>
+                      <div className="flex justify-between items-start">
+                          <span className="font-bold">Shipping</span>
+                          <div className="flex flex-col w-2/5 gap-2">
+                            <div className="flex justify-between items-center">
+                              <div className="border-2 border-gray-500 rounded-full p-2 cursor-pointer shadow-none" onClick={()=>setChooseShipping(0)}>
+                                  {chooseShipping === 0 ? <div className="p-1 bg-red-600 rounded-full" /> : <div className="p-1 bg-transparent rounded-full" />}
+                              </div>
+                              <span>Flat rate: 10%</span>
                             </div>
-                            <span>Flat rate: $10</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <div className="border-2 border-gray-500 rounded-full p-2 cursor-pointer shadow-none" onClick={()=>setChooseShipping(1)}>
-                                {chooseShipping === 1 ? <div className="p-1 bg-red-600 rounded-full" /> : <div className="p-1 bg-transparent rounded-full" />}
+                            <div className="flex justify-between items-center">
+                              <div className="border-2 border-gray-500 rounded-full p-2 cursor-pointer shadow-none" onClick={()=>setChooseShipping(1)}>
+                                  {chooseShipping === 1 ? <div className="p-1 bg-red-600 rounded-full" /> : <div className="p-1 bg-transparent rounded-full" />}
+                              </div>
+                              <span>Free shipping</span>
                             </div>
-                            <span>Free shipping</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <div className="border-2 border-gray-500 rounded-full p-2 cursor-pointer shadow-none" onClick={()=>setChooseShipping(2)}>
-                                {chooseShipping === 2 ? <div className="p-1 bg-red-600 rounded-full" /> : <div className="p-1 bg-transparent rounded-full" />}
+                            <div className="flex justify-between items-center">
+                              <div className="border-2 border-gray-500 rounded-full p-2 cursor-pointer shadow-none" onClick={()=>setChooseShipping(2)}>
+                                  {chooseShipping === 2 ? <div className="p-1 bg-red-600 rounded-full" /> : <div className="p-1 bg-transparent rounded-full" />}
+                              </div>
+                              <span>Local pickup</span>
                             </div>
-                            <span>Local pickup</span>
                           </div>
-                        </div>
-                    </div>
-                    <div className="border border-gray-300 w-full"/>
-                    <div className="flex justify-between">
-                        <span className="font-bold">Total Price</span>
-                        <span className="font-bold">$124</span>
-                    </div>
-                </div>
-            </div>
-            <div className="bg-black flex justify-center items-center cursor-pointer hover:bg-gray-800">
-                <span className="text-white font-semibold text-lg">Procced To Check Out</span>
+                      </div>
+                      <div className="border border-gray-300 w-full"/>
+                      <div className="flex justify-between">
+                          <span className="font-bold">Total Price</span>
+                          <span className="font-bold">{chooseShipping == 0 ? convertMoney(subTotalPrice+(subTotalPrice*0.1)) : convertMoney(subTotalPrice)}</span>
+                      </div>
+                  </div>
+              </div>
+              <button onClick={onNavigateToCheckout} className={`${cart ? 'bg-black hover:bg-gray-800' : 'bg-gray-500'} flex justify-center items-center `} disabled={cart ? false : true}>
+                  <span className="text-white font-semibold text-lg">Procced To Check Out</span>
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      </>}
     </>
   );
 };
 export default Cart;
-// function CompCart(props){
-//     const dispatch = useDispatch(increment);
-//     const count = useState((state)=>state?.counter?.num);
-//     const [value, setValue] = React.useState(parseInt(props.quantity));
-//     console.log(typeof value);
-//     return(
-//         <div className='grid grid-cols-12 mt-[60px] mb-[50px] gap-5'>
-//             <div className='col-span-1 flex items-center justify-center'><button><FiX /></button></div>
-//             <div className='col-span-2 flex items-center justify-center'><Image src={'/images/cart-chair1.png'} alt={'chair'} width={69} height={83} /></div>
-//             <div className='col-span-3 flex items-center justify-center'>{props.name}</div>
-//             <div className='col-span-2 flex items-center justify-center'><p>{props.price}</p></div>
-//             <div className='col-span-2 flex flex-row justify-between items-center'>
-//                 <button onClick={()=>setValue(value-1)}><FiMinus /></button>
-//                 {value}
-//                 <button onClick={()=>setValue(value+1)}><FiPlus /></button>
-//             </div>
-//             <div className='col-span-2 flex items-center justify-center'><p>$ {value * parseInt(props.price)}</p></div>
-//         </div>
-//     );
-// }
-
-// class Cart extends React.Component {
-//     render(props) {
-// export default function Cart(){
-//     // console.log(props);
-
-//     const dispatch = useDispatch();
-//     const response = useSelector((state) => state.cart?.results);
-//     console.log(response.results);
-
-//     React.useEffect(()=>{
-//         dispatch(getCart());
-//     }, [dispatch]);
-//     return(
-//         <>
-//             <Header /><div>
-//                 <div className='bg-cart flex-col pt-[74px] pr-[521] pb-[74px] pl-[521]'>
-//                     <h className='cart-text mb-5 flex items-center justify-center'>Your Cart</h>
-//                     <h4 className='cart-text2 flex items-center justify-center'>Buy everything in your cart now!</h4>
-//                 </div>
-//                 <div className='grid grid-cols-4 pt-[100px] pr-[140px] pb-[120px] pl-[140px] gap-10'>
-//                     <div className='col-span-3'>
-//                         <div className='grid grid-cols-12  gap-5'>
-//                             <div className='col-span-1'></div>
-//                             <p className='col-span-2 text-center'>PRODUCT</p>
-//                             <div className='col-span-3'></div>
-//                             <p className='col-span-2 text-center'>PRICE</p>
-//                             <p className='col-span-2 text-center'>QUANTITY</p>
-//                             <p className='col-span-2 text-center'>TOTAL</p>
-//                         </div>
-//                         {response.result?.map(o=>{
-//                             return(
-//                                 <CompCart key={o.id} pict={o.image} name={o.product_name}  price={o.price} quantity={o.quantity}/>
-//                             );
-//                         })}
-//                         <hr />
-//                         <div className='grid grid-cols-2'>
-//                             <div className='mt-8 items-end'>
-//                                 <div className='flex flex-row justify-between'>
-//                                     <button>Enter Your Coupon Code</button>
-//                                     <button>Apply Coupon</button>
-//                                 </div>
-//                                 <hr className='mt-5' />
-//                             </div>
-//                             <div className='flex justify-end gap-10'>
-//                                 <button>Clear Cart</button>
-//                                 <button>Update Cart</button>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div className='bg-zinc-200'>
-//                         <div className='p-[30px]'>
-//                             <div className='text-sm mb-[44px]'>cart total</div>
-//                             <div className='flex justify-between mb-[38px]'>
-//                                 <p className='text-sm'>subtotal</p>
-//                                 <p className='text-sm flex justify-end'>total amount</p>
-//                             </div>
-//                             <div className='flex justify-between mb-[38px]'>
-//                                 <div className='text-sm '>Shipping</div>
-//                                 <div>
-//                                     <div className='flex justify-between items-center mb-[16px] gap-3'>
-//                                         <input type='radio' id='html' name='fav_language' value='HTML' />
-//                                         <label htmlFor='html' className='text-sm'>Flat rate: $10</label>
-//                                     </div>
-//                                     <div className='flex justify-between items-center mb-[16px] gap-3'>
-//                                         <input type='radio' id='html' name='fav_language' value='HTML' />
-//                                         <label htmlFor='html' className='text-sm'>Free shipping</label>
-//                                     </div>
-//                                     <div className='flex justify-between items-center mb-[16px] gap-3'>
-//                                         <input type='radio' id='html' name='fav_language' value='HTML' />
-//                                         <label htmlFor='html' className='text-sm'>Local pickup</label>
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                             <hr className='mb-[16px]' />
-//                             <div className='flex justify-between mb-[51px]'>
-//                                 <div className='text-sm'>Total price</div>
-//                                 <div className='text-sm flex justify-end'>$125</div>
-//                             </div>
-//                         </div>
-//                         <Link href='/checkout'>
-//                             <button className='bg-black pt-[24px] pl-[105px] pr-[115px] pb-[24px] text-white'>Procced To Check Out</button>
-//                         </Link>
-//                     </div>
-//                 </div>
-//             </div><Footer />
-//         </>
-//     );
-// }
-// }
-// export const getServerSideProps= async(context)=>{
-//     // console.log(context);
-//     const cookie = cookies(context);
-//     console.log(cookie);
-//     const {data} = await axiosApiIntances().get('/cart', {
-//         headers: {
-//             Authorization: 'Bearer '+cookie.token
-//         }
-//     });
-//     console.log(data);
-//     return {props:{
-//         data: data
-//     }};
-// };
-// const mapStateToProps = (state) => ({
-//     num: state.counter.num
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//     increment: () => dispatch(increment()),
-//     decrement: () => dispatch(decrement())
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Cart);
