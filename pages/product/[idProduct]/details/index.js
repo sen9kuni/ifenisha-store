@@ -362,7 +362,7 @@ function ProductDetail(props) {
                                     <FiPlus onClick={()=> counter !== parseInt(product.stock, 10) && dispatch(increment())} />
                                 </div>
                             </div>
-                            <button disabled={parseInt(product.stock, 10) === 0 || counter === 0} onClick={()=>addToCartBtn()} className='bg-black px-7 rounded-sm shadow-md hover:bg-gray-900 disabled:bg-slate-500'>
+                            <button disabled={parseInt(product.stock, 10) === 0 || parseInt(product.stock, 10) <= 0 || counter === 0} onClick={()=>addToCartBtn()} className='bg-black px-7 rounded-sm shadow-md hover:bg-gray-900 disabled:bg-slate-500'>
                                 <span className='text-white font-semibold'>Add to cart</span>
                             </button>
                             <button  disabled={token === null || token === undefined} onClick={() => onFavorite()} className={infoWishProduct?.is_favorite === true ? 'bg-red-500 px-7 rounded-sm shadow-md hover:bg-red-600 disabled:bg-gray-400' : 'bg-black px-7 rounded-sm shadow-md hover:bg-gray-900 disabled:bg-gray-400'}>
