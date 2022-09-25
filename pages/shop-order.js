@@ -12,34 +12,14 @@ import React from 'react';
 import CardOrder from '../components/CardOrder';
 import { getOrderHistory } from '../redux/asyncAction/order';
 
-export default function Order(){
-    const dispacth = useDispatch()
-    const data = [
-        {
-            product_name: 'Fabric Mid Century Chair',
-            price: '10.50',
-            quantity: '5',
-            status: 'Sent',
-        },
-        {
-            product_name: 'Chair in Dark Grey',
-            price: '4.50',
-            quantity: '2',
-            status: 'Processed',
-        },
-        {
-            product_name: 'Dining Side Chair in Beige',
-            price: '765.99',
-            quantity: '7',
-            status: 'Pending',
-        }
-    ];
+function ShopOrder() {
+  const dispacth = useDispatch()
     const role = useSelector((state) => state.auth.role);
     const idUser = useSelector(state=>state.auth.id);
     const orderResults = useSelector(state=>state.order.results);
-    const menuTab = role === 'seller' ? ['Profile', 'My Product', 'Selling Product', 'My Order', 'Shop Order'] : ['Profile', 'My Order']
-    const linkTo = role === 'seller' ? [`/profile/${role==='seller'?'seller':'customer'}`, '/profile/my-product/all?page=1&limit=5', '/profile/add-product', '/order', '/shop-order'] : [`/profile/${role==='seller'?'seller':'customer'}`, '/order'];
-    const indexTab = 3;
+    const menuTab = ['Profile', 'My Product', 'Selling Product', 'My Order', 'Shop Order'];
+    const linkTo = [`/profile/${role==='seller'?'seller':'customer'}`, '/profile/my-product/all?page=1&limit=5', '/profile/add-product', '/order', '/shop-order'];
+    const indexTab = 4;
     const [order, setOrder] = React.useState({active: false, left: 0, top: 0});
     const [product, setProduct] = React.useState({active: false, left: 0, top: 0});
     const menuOrder = (e) => {
@@ -49,10 +29,10 @@ export default function Order(){
         setProduct({active: !product.active, left: e.pageX - 60, top: e.pageY + 30});
     };
     React.useEffect(() => {
-        dispacth(getOrderHistory({type: 'all', id: idUser, role: 'customer' }))
+        dispacth(getOrderHistory({type: 'all', id: idUser, role: 'seller' }))
     }, [dispacth, idUser])
-    return(
-        <div>
+  return (
+    <div>
             <Header />
             <Banner titleBanner='My Order' subtitleBanner='See your notifications for the latest updates'/>
             <div>
@@ -188,11 +168,13 @@ export default function Order(){
                     <CardOrder nameProduct='aaaaaa' status='paid' price='5000' qty='5' total='500000' role='cutomer' />
                     <CardOrder nameProduct='aaaaaa' status='sent' price='5000' qty='5' total='500000' role='cutomer' /> */}
                     {orderResults?.map((e) => {
-                        return <CardOrder key={e.id+e.status_payment} nameProduct={e.cart.products.product_name} image={e.cart.products.product_images.split(',')[0]} status={e.status_payment} qty={e.cart.quantity} role='customer' price={e.cart.products.price} total={e.cart.total_price} idOrder={e.id} />
+                        return <CardOrder key={e.id+e.status_payment} nameProduct={e.cart.products.product_name} image={e.cart.products.product_images.split(',')[0]} status={e.status_payment === 'process' ? 'processed' : e.status_payment} qty={e.cart.quantity} role='seller' price={e.cart.products.price} total={e.cart.total_price} idOrder={e.id} />
                     })}
                 </div>
             </main>
             <Footer />
         </div>
-    );
+  )
 }
+
+export default ShopOrder

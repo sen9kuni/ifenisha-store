@@ -183,7 +183,7 @@ function ProductDetail(props) {
     const successMsgWish = useSelector((state=>state.wishFav.successMsg));
 
     const onAddWishlist = async () => {
-        if (infoWishProduct?.is_deleted === true) {
+        if (infoWishProduct?.is_deleted === true || infoWishProduct === undefined || infoWishProduct === null) {
             await dispatch(createWishFav({product_id: idProduct, is_favorite: true}))
             dispatch(getInfoWish(idProduct))
             setNotifWishCreate(true)
@@ -371,7 +371,7 @@ function ProductDetail(props) {
                                 </div>
                             </button>
                             <button disabled={token === null || token === undefined} onClick={() => onAddWishlist()} className='border border-gray-400 px-7 rounded-sm shadow-md hover:border-gray-800 disabled:bg-slate-500'>
-                                <span className='text-black font-semibold'>{infoWishProduct?.is_deleted === true ? 'Add to wishlist' : infoWishProduct?.is_deleted === false ? 'Remove from Wishlist' : 'login dulu' }</span>
+                                <span className='text-black font-semibold'>{infoWishProduct?.is_deleted === true ? 'Add to wishlist' : infoWishProduct?.is_deleted === false ? 'Remove from Wishlist' : (token === null || token === undefined) ? 'login dulu' : 'Add to wishlist' }</span>
                             </button>
                             <button onClick={()=>chatSeller()} className='border border-gray-400 px-7 rounded-sm shadow-md hover:border-gray-800'>
                                 <span className='text-black font-semibold'>Chat Seller</span>

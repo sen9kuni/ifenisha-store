@@ -406,8 +406,8 @@ export const TableProduct = ({slug}) => {
 function MyProduct() {
     const role = useSelector((state) => state.auth.role);
     const router = useRouter();
-    const menuTab = ['Profile', 'My Product', 'Selling Product', 'My Order'];
-    const linkTo = [`/profile/${role==='seller'?'seller':'customer'}`, '/profile/my-product/all?page=1&limit=5', '/profile/add-product', '/order'];
+    const menuTab = ['Profile', 'My Product', 'Selling Product', 'My Order', 'Shop Order'];
+    const linkTo = [`/profile/${role==='seller'?'seller':'customer'}`, '/profile/my-product/all?page=1&limit=5', '/profile/add-product', '/order', '/shop-order'];
     const indexTab = 1;
     const [order, setOrder] = React.useState({active: false, left: 0, top: 0});
     const [product, setProduct] = React.useState({active: false, left: 0, top: 0});

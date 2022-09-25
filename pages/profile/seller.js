@@ -24,8 +24,8 @@ function Seller() {
     const dispatch = useDispatch();
     const role = useSelector((state) => state.auth.role);
     const dataSeller = useSelector((state) => state.profileSeller.dataSeller);
-    const menuTab = ['Profile', 'My Product', 'Selling Product', 'My Order'];
-    const linkTo = [`/profile/${role==='seller'?'seller':'customer'}`, '/profile/my-product/all?page=1&limit=5', '/profile/add-product', '/order'];
+    const menuTab = ['Profile', 'My Product', 'Selling Product', 'My Order', 'Shop Order'];
+    const linkTo = [`/profile/${role==='seller'?'seller':'customer'}`, '/profile/my-product/all?page=1&limit=5', '/profile/add-product', '/order', '/shop-order'];
     const indexTab = 0;
     const [order, setOrder] = React.useState({active: false, left: 0, top: 0});
     const [product, setProduct] = React.useState({active: false, left: 0, top: 0});

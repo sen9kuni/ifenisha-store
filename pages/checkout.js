@@ -83,7 +83,7 @@ export default function Order(){
             if(cartData?.length > 1) {
                 cartData?.map((e, i) => {
                     // console.log('1');
-                    dispatch(createOrder({cart_id: e.id, checkout_id: cartData?.id}))
+                    dispatch(createOrder({cart_id: e.id, checkout_id: checkoutData?.id}))
                     if(i == cartData.length -1) {
                         dispatch(resetMessageCheckout());
                     }

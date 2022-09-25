@@ -17,8 +17,9 @@ export const createOrder = createAsyncThunk('order/create', async (request) => {
 export const getOrderHistory = createAsyncThunk('order/history', async (request) => {
     const result = {};
     try {
-        const send = qs.stringify({seller_id: request.seller_id, custumer_id: request.customer_id});
-        const {data} = await http3().get('/order/'+request.type, send);
+        // const send = qs.stringify({seller_id: request.seller_id, custumer_id: request.customer_id});
+        const {data} = await http3().get(`/order/${request.type}/${request.role}/${request.id}`);
+        console.log(data);
         return data;
     } catch (error) {
         result.errorMsg = error.response.data.message;
@@ -29,7 +30,7 @@ export const getOrderHistory = createAsyncThunk('order/history', async (request)
 export const updateStatusOrder = createAsyncThunk('order/status', async (request) => {
     try {
         const send = qs.stringify({type: request.type});
-        const {data} = await http3().patch('/order'+request.id, send);
+        const {data} = await http3().patch('/order/'+request.id, send);
         return data;
     } catch (error) {
         result.errorMsg = error.response.data.message;
