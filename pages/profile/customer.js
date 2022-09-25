@@ -29,8 +29,8 @@ function Customer() {
     const token = useSelector(state=>state.auth.token);
     const role = useSelector((state) => state.auth.role);
     const profile = useSelector(state => state.customer?.data)
-    const menuTab = ['Profile'];
-    const linkTo = [`/profile/${role==='seller'?'seller':'customer'}`, '/profile/my-product', '/profile/add-product', '/order'];
+    const menuTab = ['Profile', 'My Order'];
+    const linkTo = [`/profile/${role==='seller'?'seller':'customer'}`, '/order'];
     const indexTab = 0;
     const handleClose = type => {
         switch (type) {

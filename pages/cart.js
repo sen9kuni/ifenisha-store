@@ -46,6 +46,11 @@ const Cart = () => {
   const onApplyCoupon = () => {
     dispatch(checkCoupon({code: coupon}))
   }
+
+  const onClear = () => {
+    cart?.forEach((e) => dispatch(deleteCart(e.id)))
+  }
+  
   const onNavigateToCheckout = () => {
     let shippingName;
     switch (chooseShipping) {
@@ -211,7 +216,7 @@ const Cart = () => {
                     <div className="w-full grid grid-cols-2">
                       <div className="col-span-1" />
                       <div className="col-span-1 w-full flex flex-row justify-end">
-                        <button className="mr-5 text-base text-black">
+                        <button onClick={onClear} className="mr-5 text-base text-black">
                           Clear Cart
                         </button>
                         {/* <button className="font-bold text-black">

@@ -96,11 +96,7 @@ export default function Wishlist(){
 
                     {/* card  wishlist & favorite */}
                     {resultWish ? resultWish?.map((e) => {
-                        return e.is_deleted === false ? <CardWishFav key={e.id + e.created_at} id={e.id} image={e.products.product_images} nameProduct={e.products.product_name} stock={parseInt(e.products.stock, 10)} price={parseInt(e.products.price, 10)} /> : 
-                        <div className='w-full h-[350px] flex justify-center items-center flex-col border-4 border-black'>
-                        <FiAlertOctagon className='mb-3' size={70} />
-                        <span className='font-bold text-2xl'>Your Wishlist is Empty</span>
-                    </div>
+                        return e.is_deleted === false && <CardWishFav key={e.id + e.created_at} id={e.id} image={e.products.product_images} nameProduct={e.products.product_name} stock={parseInt(e.products.stock, 10)} price={parseInt(e.products.price, 10)} /> 
                     }) : (
                         <div className='w-full h-[350px] flex justify-center items-center flex-col border-4 border-black'>
                             <FiAlertOctagon className='mb-3' size={70} />
