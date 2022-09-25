@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getCart,addToCart, deleteCart, updateQuantityCart } from '../asyncAction/cart';
+import { getCart,addToCart, deleteCart, updateQuantityCart, updateCartUser } from '../asyncAction/cart';
 
 const initialState ={
     results: [],
@@ -7,7 +7,10 @@ const initialState ={
     errormsg: '',
     successUpdateMsg: null,
     errorUpdateMsg: null,
+    successUpdateCartMsg: null,
+    errorUpdateCartMsg: null,
     subTotalPrice: 0,
+    saveData: [],
 };
 
 const cart = createSlice({
@@ -17,17 +20,25 @@ const cart = createSlice({
         resetCartMsg: (state) => {
             state.successmsg = '';
             state.errormsg = '';
+            state.successUpdateMsg = null;
+            state.errorUpdateMsg = null;
+            state.successUpdateCartMsg = null;
+            state.errorUpdateCartMsg = null;
         },
-        setSubTotalPrice: (state, action) => {
+        saveDataCartUser: (state, action) => {
             // state.subTotalPrice=[action.payload]
+            state.saveData.push(action.payload);
         }
     },
     extraReducers: (build)=>{
         build.addCase(getCart.pending,(state)=>{
-            state.results = '';
+            state.results = [];
             state.errorUpdateMsg = null;
             state.successUpdateMsg = null;
+            state.errorUpdateCartMsg = null;
+            state.successUpdateCartMsg = null;
             state.subTotalPrice = 0;
+            state.saveData = [];
         });
         build.addCase(getCart.fulfilled,(state,action)=>{
             state.results = action.payload?.value;
@@ -58,21 +69,18 @@ const cart = createSlice({
         build.addCase(updateQuantityCart.fulfilled, (state, action) => {
             state.errorUpdateMsg = action.payload.errorMsg;
             state.successUpdateMsg = action.payload.message;
-            // const updateData = action.payload.result;
-            // console.log(updateData)
-            // const currentData = state.results;
-            // if(currentData) {
-            //     currentData?.forEach((e, i) => {
-            //         if(e.id === updateData.id) {
-            //             e.quantity = updateData.quantity;
-            //             e.total_price = updateData.total_price;
-            //         }
-            //     })
-            // }
-        })
+        });
+        build.addCase(updateCartUser.pending, state => {
+            state.errorUpdateCartMsg = null;
+            state.successUpdateCartMsg = null;
+        });
+        build.addCase(updateCartUser.fulfilled, (state, action) => {
+            state.errorUpdateCartMsg = action.payload.errorMsg;
+            state.successUpdateCartMsg = action.payload.message;
+        });
     }
 });
 
-export {getCart, deleteCart, updateQuantityCart};
-export const {resetCartMsg, setSubTotalPrice} = cart.actions;
+export {getCart, deleteCart, updateQuantityCart, updateCartUser};
+export const {resetCartMsg, saveDataCartUser} = cart.actions;
 export default cart.reducer;

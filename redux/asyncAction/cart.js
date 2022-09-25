@@ -50,3 +50,15 @@ export const updateQuantityCart = createAsyncThunk('cart/updateQuantity', async 
         return result;
     }
 });
+
+export const updateCartUser = createAsyncThunk('cart/updateCart', async(request) => {
+    const result = {};
+    try {
+        const send = qs.stringify({product_id: request.productId, quantity: request.quantity, coupon_id: request.couponId, shipping: request.shipping})
+        const {data} = await http3().patch('/cart/'+request.id, send);
+        return data;
+    } catch (error) {
+        result.errorMsg = error.response.data.message;
+        return result;
+    }
+});

@@ -13,30 +13,80 @@ import { connect } from "react-redux";
 import { decrement, increment } from "../redux/reducers/counter";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCart, getCart } from "../redux/asyncAction/cart";
+import { deleteCart, getCart, updateCartUser } from "../redux/asyncAction/cart";
 import Banner from "../components/Banner";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import CardCart from "../components/CardCart";
 import { convertMoney } from "./profile/add-product";
+import { checkCoupon } from "../redux/asyncAction/coupon";
+import { resetMessage } from "../redux/reducers/coupon";
+import { resetCartMsg, saveDataCartUser } from "../redux/reducers/cart";
+import { resetMessageCheckout } from "../redux/reducers/checkout";
+import { resetOrderMsg } from "../redux/reducers/order";
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigation = useRouter();
   const token = useSelector(state=>state.auth.token);
   const cart = useSelector( state => state.cart.results);
   const successMsg = useSelector(state => state.cart.successUpdateMsg);
   const errorMsg = useSelector(state => state.cart.errorUpdateMsg);
+  const successUpdateCartMsg = useSelector(state => state.cart.successUpdateCartMsg);
+  const errorUpdateCartMsg = useSelector(state => state.cart.errorUpdateCartMsg);
   const subTotalPrice = useSelector(state => state.cart.subTotalPrice);
   const [chooseShipping, setChooseShipping] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
+  const [coupon, setCoupon] = React.useState();
+  const couponData = useSelector(state => state.coupon.result);
+  const errorMsgCoupon = useSelector(state => state.coupon.errorMsg);
+  const successMsgCoupon = useSelector(state => state.coupon.successMsg);
+  const [showCouponMsg, setShowCouponMsg] = React.useState(false);
+  const [showCartMsg, setShowCartMsg] = React.useState(false);
   // console.log(subTotalPrice)
+  const onApplyCoupon = () => {
+    dispatch(checkCoupon({code: coupon}))
+  }
   const onNavigateToCheckout = () => {
-    console.log()
+    let shippingName;
+    switch (chooseShipping) {
+      case 0:
+        shippingName = 'flat rate 10%'
+        break;
+      case 1:
+        shippingName = 'free shipping'
+        break;
+      case 2:
+        shippingName = 'local picking'
+        break;
+      default:
+        window.alert('no shipping choosed')
+        break;
+    }
+    const couponId = couponData && couponData?.id;
+
+    if(cart?.length > 1) {
+      cart?.forEach(e => {
+        if(e.quantity == 0) {
+          window.alert('Your cart with zero quantity can\'t be processed.')
+        } else {
+          dispatch(updateCartUser({id: e.id, productId: e.product_id, quantity: e.quantity, couponId: couponId, shipping: shippingName}));
+          dispatch(saveDataCartUser({id: e.id}));
+          // console.log('product id ', e.product_id, 'quantity ', e.quantity, 'coupon id ', couponId, 'shipping ', shippingName)
+        }
+      });
+    } else {
+      dispatch(updateCartUser({id: cart[0]?.id, productId: cart[0]?.product_id, quantity: cart[0]?.quantity, couponId: couponId, shipping: shippingName}));
+      dispatch(saveDataCartUser({id: cart[0]?.id}));
+    }
   }
   if(!token){
     Router.push('/login')
   }
   React.useEffect(()=>{
     dispatch(getCart());
+    dispatch(resetMessageCheckout());
+    dispatch(resetOrderMsg());
+    dispatch(resetMessage());
     setLoading(true);
     setTimeout(()=>{
         setLoading(false);
@@ -50,7 +100,29 @@ const Cart = () => {
           setLoading(false);
       }, 1000);
     }
-  },[dispatch, errorMsg, successMsg])
+    if(!coupon) {
+      dispatch(resetMessage());
+    }
+    if(errorMsgCoupon != null) {
+      setShowCouponMsg(true);
+      setTimeout(() => {
+        setShowCouponMsg(false);
+      }, 3000);
+    }
+    if(successMsgCoupon != null) {
+      setShowCouponMsg(true);
+      setTimeout(() => {
+        setShowCouponMsg(false);
+      }, 3000);
+    }
+    if(successUpdateCartMsg != null && errorUpdateCartMsg == null) {
+      setShowCartMsg(true);
+      setTimeout(() => {
+        setShowCartMsg(false)
+        navigation.push('/checkout')
+      }, 2500);
+    }
+  },[dispatch, errorMsg, successMsg, errorMsgCoupon, successMsgCoupon, coupon, successUpdateCartMsg, errorUpdateCartMsg, navigation, showCartMsg])
   return (
     <>
     {!cart && loading ? 
@@ -71,6 +143,30 @@ const Cart = () => {
           titleBanner={"Your Cart"}
           subtitleBanner={"Buy everything in your cart now!"}
         />
+        {successUpdateCartMsg && showCartMsg ? (
+          <>
+            <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-8 shadow-md  mt-20" role="alert">
+              <div class="flex justify-center">
+                <div>
+                  <p class="font-bold text-3xl">Cart has been updated.</p>
+                  <p class="text-xl text-center">{successUpdateCartMsg}</p>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : null }
+        {errorUpdateCartMsg && showCartMsg ? (
+          <>
+            <div class="bg-yellow-100 border-t-4 border-yellow-500 rounded-b text-yellow-900 px-4 py-8 shadow-md  mt-20" role="alert">
+              <div class="flex justify-center">
+                <div>
+                  <p class="font-bold text-3xl">Failed to update cart.</p>
+                  <p class="text-xl text-center">{errorUpdateCartMsg}</p>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : null }
         <div className="grid grid-cols-12 px-[80px] my-20">
           <div className="col-span-8">
             <div className="w-full flex justify-start items-center flex-col mb-5">
@@ -93,7 +189,7 @@ const Cart = () => {
             {cart ? cart.map((e, i)=>{
               return(
                 <>
-                  <CardCart id={e.id} product_id={e.product_id} onClick={()=>dispatch(deleteCart(e.id))} image={e.products.product_images.split(',')[0]} nameProduct={e.products.product_name} price={e.products.price} quantity={e.quantity} total={e.total_price} />
+                  <CardCart key={'key '+i+e.id} id={e.id} product_id={e.product_id} onClick={()=>dispatch(deleteCart(e.id))} image={e.products.product_images.split(',')[0]} nameProduct={e.products.product_name} price={e.products.price} quantity={e.quantity} total={e.total_price} />
                 </>
               )
             }) : <div className="min-h-[300px] flex justify-center items-center text-2xl font-semibold">
@@ -106,8 +202,10 @@ const Cart = () => {
                       class="appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
                       type="text"
                       placeholder="Enter your coupon code"
+                      value={coupon}
+                      onChange={(e) => setCoupon(e.target.value)}
                     />
-                    <button className="font-bold">Apply Coupon</button>
+                    <button onClick={onApplyCoupon} className="font-bold">Apply Coupon</button>
                   </div>
                   <div className="col-span-1 w-full flex items-center">
                     <div className="w-full grid grid-cols-2">
@@ -125,6 +223,22 @@ const Cart = () => {
                 </div>
               </div>
             </div>
+            {errorMsgCoupon && showCouponMsg ? (
+              <>
+                <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+                  <p class="font-bold">Coupon invalid</p>
+                  <p>{errorMsgCoupon}</p>
+                </div>
+              </>
+            ) : null}
+            {successMsgCoupon && showCouponMsg ? (
+              <>
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+                  <p class="font-bold">Coupon valid</p>
+                  <p>{successMsgCoupon}</p>
+                </div>
+              </>
+            ) : null}
           </div>
           <div className="col-span-4 bg-gray-100 ">
             <div className="grid grid-flow-row grid-rows-6 h-full">

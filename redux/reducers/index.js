@@ -12,7 +12,10 @@ import cart from './cart';
 import customer from './customer';
 import profileSeller from './profileSeller';
 import wishFav from './wishFav';
-
+import coupon from './coupon';
+import checkout from './checkout';
+import payment from './payment';
+import order from './order';
 
 const authPersistConfig = {
     key:'auth',
@@ -32,6 +35,10 @@ const reducer = combineReducers({
     cart: cart,
     profileSeller,
     wishFav,
+    coupon,
+    payment,
+    checkout,
+    order,
 });
 
 export default reducer;
