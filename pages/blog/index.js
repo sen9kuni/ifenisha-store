@@ -16,7 +16,7 @@ export default function LandingPage(){
                 <Banner titleBanner="Our Blog" subtitleBanner="Read and enjoy content from us"/>
                 <div className="max-w-[900px] w-full p-5 flex flex-col items-center gap-7">
                     <div className="w-full h-fit flex justify-center">
-                        <Image src={blogImage} layout={"fixed"} />
+                        <Image src={blogImage} layout={"fixed"} alt='image props blog' />
                     </div>
                     <span className="text-3xl font-semibold w-full">How to open interior shop?</span>
                     <span className="text-justify overflow-hidden h-[70px]">
@@ -34,7 +34,7 @@ export default function LandingPage(){
                 </div>  
                 <div className="max-w-[900px] w-full p-5 flex flex-col items-center gap-7">
                     <div className="w-full h-fit flex justify-center">
-                        <Image src={blogImage} layout={"fixed"} />
+                        <Image src={blogImage} layout={"fixed"} alt='image props blog' />
                     </div>
                     <span className="text-3xl font-semibold w-full">How to open interior shop?</span>
                     <span className="text-justify overflow-hidden h-[70px]">
@@ -52,7 +52,7 @@ export default function LandingPage(){
                 </div>  
                 <div className="max-w-[900px] w-full p-5 flex flex-col items-center gap-7">
                     <div className="w-full h-fit flex justify-center">
-                        <Image src={blogImage} layout={"fixed"} />
+                        <Image src={blogImage} layout={"fixed"} alt='image props blog' />
                     </div>
                     <span className="text-3xl font-semibold w-full">How to open interior shop?</span>
                     <span className="text-justify overflow-hidden h-[70px]">
@@ -70,7 +70,7 @@ export default function LandingPage(){
                 </div>  
                 <div className="max-w-[900px] w-full p-5 flex flex-col items-center gap-7">
                     <div className="w-full h-fit flex justify-center">
-                        <Image src={blogImage} layout={"fixed"} />
+                        <Image src={blogImage} layout={"fixed"} alt='image props blog' />
                     </div>
                     <span className="text-3xl font-semibold w-full">How to open interior shop?</span>
                     <span className="text-justify overflow-hidden h-[70px]">

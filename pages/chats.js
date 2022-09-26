@@ -86,7 +86,7 @@ const Chats = () => {
     React.useEffect(()=>{
         dispatch(resetmsg());
         dispatch(getAllChat());
-    },[succesmsg]);
+    },[dispatch, succesmsg]);
     return (
         <>
             <Header/>

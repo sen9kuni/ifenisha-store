@@ -16,7 +16,7 @@ export default function LandingPage(){
                 <Banner titleBanner="How to open interior shop?" subtitleBanner="Read and enjoy content from us"/>
                 <div className="max-w-[900px] w-full p-5 flex flex-col items-center gap-7">
                     <div className="w-full h-fit flex justify-center">
-                        <Image src={blogImage} layout={"fixed"} />
+                        <Image src={blogImage} layout={"fixed"} alt='image detail blog' />
                     </div>
                     <span className="text-3xl font-semibold">How to open interior shop?</span>
                     <span className="text-justify">

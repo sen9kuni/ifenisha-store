@@ -208,7 +208,7 @@ export default function Order(){
                         {
                             orderResults.result && pagesOrder.map((e, i)=>{
                                 return(
-                                    <button onClick={()=> onClickPage({type: router.query.type == undefined? 'all':router.query.type, page: i+1})} className={`${orderResults.pageInfo?.currentPage == i+1?'bg-black':'bg-white'} border border-gray-400 py-3 px-4 rounded-lg`}>
+                                    <button key={i} onClick={()=> onClickPage({type: router.query.type == undefined? 'all':router.query.type, page: i+1})} className={`${orderResults.pageInfo?.currentPage == i+1?'bg-black':'bg-white'} border border-gray-400 py-3 px-4 rounded-lg`}>
                                         <span className={`${orderResults.pageInfo?.currentPage == i+1?'text-white':'text-black'}`}>{i+1}</span>
                                     </button>
                                 )

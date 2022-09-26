@@ -12,7 +12,7 @@ const Notification = () => {
     const [paginate, setPaginet] = React.useState(buttonPaginate[0]);
     React.useEffect(()=>{
         dispatch(getNotif());
-    },[]);
+    },[dispatch]);
     return (
         <>
             <Header/>
