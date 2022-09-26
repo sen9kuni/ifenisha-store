@@ -10,10 +10,12 @@ import { useRouter } from 'next/router';
 import { Formik } from 'formik';
 import Router from 'next/router';
 import { allCategory, getProductUser } from '../redux/asyncAction/product';
+import { getProfileCustomer } from '../redux/asyncAction/customer';
 
 export default function Header(){
     const dispatch = useDispatch();
     const router = useRouter();
+    const data = useSelector(state => state.customer?.data)
     const [page, setPage] = React.useState({active: false, left: 0, top: 0});
     const [shop, setShop] = React.useState({active: false, left: 0, top: 0});
     const [burger, setBurger] = React.useState({active: false, left: 0, top: 0});
@@ -21,7 +23,6 @@ export default function Header(){
     const [showDropdown, setShowDropdown] = React.useState(false);
     const token = useSelector((state) => state.auth.token);
     const role = useSelector((state) => state.auth.role);
-
     const pagePos = (e) => {
         setPage({active: !page.active, left: e.pageX - 60, top: e.pageY + 30});
     };
@@ -47,6 +48,7 @@ export default function Header(){
     React.useEffect(()=>{
         dispatch(allCategory());
         dispatch(getProductUser());
+        dispatch(getProfileCustomer())
     }, [dispatch]);
 
     return(
@@ -99,7 +101,7 @@ export default function Header(){
                     {token?
                         <>
                             <div className='rounded-full overflow-hidden border-4 border-gray-400 w-[35px] h-[35px]' onClick={(e)=> pageProfile(e)}>
-                                <Image className='rounded-full w-fit h-fit' src={default_image} width={35} height={35} alt='user' />
+                                <Image className='rounded-full w-fit h-fit' src={data.image? data.image: default_image} width={35} height={35} alt='user' />
                             </div>
                             {
                                 profile.active&&
