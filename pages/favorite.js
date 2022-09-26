@@ -18,7 +18,7 @@ export default function Wishlist(){
     React.useEffect(() => {
         dispatch(getAllWishFav('1'))
     }, [dispatch])
-    console.log(resultWish);
+    // console.log(resultWish);
     return(
         <>
             <Header />

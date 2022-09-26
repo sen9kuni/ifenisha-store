@@ -14,7 +14,7 @@ function DummyLab() {
   const handleClose = type => {
     setShowModal(false)
   }
-  console.log(dataImage.length);
+  // console.log(dataImage.length);
   return (
     <>
     {/* <div className='grid grid-cols-3 gap-4'>

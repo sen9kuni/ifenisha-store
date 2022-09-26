@@ -6,7 +6,7 @@ const nextConfig = {
     //   BACK_END_URL:'https://parabot-backend.vercel.app'
       // BACK_END_URL:'https://parabot-server.vercel.app'
       BACK_END_URL:'https://fw9-parabot-backend-mkkn.vercel.app'
-    //   BACK_END_URL:'http://localhost:3335'
+      // BACK_END_URL:'http://localhost:3335'
   },
 
   images: {

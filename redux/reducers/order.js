@@ -38,7 +38,7 @@ const order = createSlice({
         build.addCase(getOrderHistory.fulfilled, (state, action) => {
             state.errorMsg = action.payload.errorMsg;
             state.successMsg = action.payload.message;
-            state.results = action.payload.result;
+            state.results = action.payload;
         });
         build.addCase(updateStatusOrder.pending, state => {
             state.errorUpdateMsg = null;
