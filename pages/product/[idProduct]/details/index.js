@@ -64,7 +64,7 @@ export async function getServerSideProps(context){
             };
         }
         catch(err){
-            console.log(err);
+            // console.log(err);
             return {
                 props:{
                     isError:true

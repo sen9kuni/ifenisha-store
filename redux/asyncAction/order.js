@@ -18,8 +18,8 @@ export const getOrderHistory = createAsyncThunk('order/history', async (request)
     const result = {};
     try {
         // const send = qs.stringify({seller_id: request.seller_id, custumer_id: request.customer_id});
-        const {data} = await http3().get(`/order/${request.type}/${request.role}/${request.id}`);
-        console.log(data);
+        const {data} = await http3().get(`/order/${request.type}/${request.role}/${request.id}?page=${request.page}`);
+        console.log(request);
         return data;
     } catch (error) {
         result.errorMsg = error.response.data.message;
@@ -42,7 +42,7 @@ export const getDetailOrder = createAsyncThunk('order/detail', async (request) =
     const result = {};
     try {
         const {data} = await http3().get('/order/details/'+request.id);
-        console.log(data);
+        // console.log(data);
         return data;
     } catch (error) {
         result.errorMsg = error.response.data.message;

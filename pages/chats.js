@@ -79,7 +79,7 @@ const Chats = () => {
     const recepient_id =useSelector((state=>state.chats.recepient));
     const succesmsg = useSelector((state=>state.chats.succesmsg));
     const sendChat = (val) =>{
-        console.log(val.chats);
+        // console.log(val.chats);
         const request = {chat_id:chat_id,content:val.chats,recepient_id:recepient_id,sender:sender};
         dispatch(sending(request));
     };
@@ -96,7 +96,7 @@ const Chats = () => {
                     <div className='grid grid-cols-5 min-h-[800px]'>
                         <div className='col-span-2 border border-[#D1D1D1]'>
                             {wrapper&&wrapper.map((val)=>{
-                                console.log(val);
+                                // console.log(val);
                                 return(
                                     <>
                                         <WrapperDynamic image={val.image} name={val.full_name} id={val.id} sender={val.sender_id} recepient={val.recepient_id}/>

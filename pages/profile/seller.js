@@ -54,7 +54,7 @@ function Seller() {
     }
     let param = ''
     const changeName = value => {
-        console.log(value);
+        // console.log(value);
         switch (showIndex) {
             case 0:
                 param = {full_name: value.full_name}
@@ -73,7 +73,7 @@ function Seller() {
                 dispatch(editProfileSeller(param))
                 break;
             case 5:
-                console.log('image profile')
+                // console.log('image profile')
                 break;
             default:
                 param = {store_desc: value.store_desc}
