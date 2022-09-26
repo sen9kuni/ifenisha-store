@@ -140,11 +140,11 @@ function ShopOrder() {
                 </div> */}
                 <div className='px-[140px] w-full mb-5'>
                     <div className='w-full h-[60px] mb-3'>
-                        <div className='w-full h-full grid grid-cols-2'>
+                        <div className='w-full h-full grid grid-cols-3'>
                             <div className='col-span-1 flex justify-start items-center'>
-                            <span className='font-normal text-xl text-slate-500'>PRODUCTS</span>
+                                <span className='font-normal text-xl text-slate-500'>PRODUCTS</span>
                             </div>
-                            <div className='col-span-1'>
+                            <div className='col-span-2'>
                             <div className='w-full h-full grid-cols-4 flex flex-row justify-between items-center'>
                                 <div className='col-span-1 w-full flex justify-center'>
                                 <span className='font-normal text-xl text-slate-500'>PRICE</span>

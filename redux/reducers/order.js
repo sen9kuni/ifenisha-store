@@ -55,7 +55,7 @@ const order = createSlice({
         build.addCase(getDetailOrder.fulfilled, (state, action) => {
             state.errorMsg = action.payload.errorMsg;
             state.successMsg = action.payload.message;
-            state.result = action.action.result;
+            state.result = action.payload.result[0];
         });
     }
 });
