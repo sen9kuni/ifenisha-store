@@ -25,6 +25,7 @@ import { addToCart } from '../../../../redux/asyncAction/cart';
 import { decrement, increment, resetCounter } from '../../../../redux/reducers/counter';
 import { resetCartMsg } from '../../../../redux/reducers/cart';
 import { createWishFav, deleteWishFav, getInfoWish, recoverWishFav, updateFav } from '../../../../redux/asyncAction/wishFav';
+import { getReview } from '../../../../redux/asyncAction/review';
 
 export async function getServerSideProps(context){
     const DataCookies = cookies(context)
@@ -64,7 +65,6 @@ export async function getServerSideProps(context){
             };
         }
         catch(err){
-            // console.log(err);
             return {
                 props:{
                     isError:true
@@ -181,7 +181,6 @@ function ProductDetail(props) {
     const succesCartmsg = useSelector((state=>state.cart.successmsg));
     const infoWishProduct = useSelector((state=>state.wishFav.infoWishProduct));
     const successMsgWish = useSelector((state=>state.wishFav.successMsg));
-
     const onAddWishlist = async () => {
         if (infoWishProduct?.is_deleted === true || infoWishProduct === undefined || infoWishProduct === null) {
             await dispatch(createWishFav({product_id: idProduct, is_favorite: true}))
@@ -246,12 +245,12 @@ function ProductDetail(props) {
         setTimeout(()=>dispatch(resetCartMsg()),5000);
     }
     React.useEffect(()=>{
+        setTimeout(()=>dispatch(getReview({idProduct,})),1000)
         dispatch(resetCounter())
         if(succesChatmsg){
             dispatch(resetChatmsg());
             Router.push('/chats');
         }
-
         if (token !== null || token !== undefined) {
             dispatch(getInfoWish(idProduct))
         }
