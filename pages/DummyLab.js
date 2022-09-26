@@ -4,6 +4,7 @@ import React from 'react'
 import {BsShop} from 'react-icons/bs';
 import { FiCheck, FiMinusCircle, FiPlus, FiPlusCircle, FiTrash2, FiX } from 'react-icons/fi';
 import CardProduct from '../components/CardProduct';
+import ModalOrders from '../components/ModalOrders';
 import ModalStatusOrder from '../components/ModalStatusOrder';
 
 function DummyLab() {
@@ -536,7 +537,7 @@ function DummyLab() {
         </div>
 
         {/* card my order */}
-        <div className='w-[1140px] h-[83px] mb-3'>
+        {/* <div className='w-[1140px] h-[83px] mb-3'>
           <div className='w-full h-full grid grid-cols-2'>
             <div className='col-span-1'>
               <div className='w-full h-full grid grid-cols-3'>
@@ -564,6 +565,43 @@ function DummyLab() {
                     </div>
                   </button>
                   <ModalStatusOrder visible={showModal} onClose={handleClose} />
+                </div>
+                <div className='col-span-1 w-full flex justify-center'>
+                  <span className='font-bold text-xl text-black'>$21.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> */}
+
+        <div className='w-[1140px] h-[83px] mb-3'>
+          <div className='w-full h-full grid grid-cols-2'>
+            <div className='col-span-1'>
+              <div className='w-full h-full grid grid-cols-3'>
+                <div className='h-full w-[69px] relative overflow-hidden'>
+                  <Image src={'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
+                </div>
+                <div className='col-span-1 flex items-center w-full'><p className='text-lg truncate'>Dining Side Chair in Beige</p></div>
+              </div>
+            </div>
+            <div className='col-span-1'>
+              <div className='w-full h-full grid-cols-4 flex flex-row justify-between items-center'>
+                <div className='col-span-1 w-full flex justify-center'>
+                  <span className='font-bold text-xl text-black'>$10.50</span>
+                </div>
+                <div className='col-span-1 w-full flex justify-center'>
+                  <span className='font-normal text-xl text-slate-600'>02</span>
+                </div>
+                <div className='col-span-1 w-full flex justify-center'>
+                  <button onClick={() => setShowModal(true)} className='w-[100px] h-[30px] rounded-lg border-2 border-slate-400 flex justify-center'>
+                    <div className='flex flex-row items-center'>
+                      <div className='h-[15px] w-[15px] border-2 border-black rounded-full flex justify-center items-center mr-1'>
+                        <FiCheck size={10} />
+                      </div>
+                      <span>Sent</span>
+                    </div>
+                  </button>
+                  <ModalOrders visible={showModal} onClose={handleClose} />
                 </div>
                 <div className='col-span-1 w-full flex justify-center'>
                   <span className='font-bold text-xl text-black'>$21.00</span>

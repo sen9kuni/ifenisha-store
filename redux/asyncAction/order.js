@@ -42,6 +42,7 @@ export const getDetailOrder = createAsyncThunk('order/detail', async (request) =
     const result = {};
     try {
         const {data} = await http3().get('/order/details/'+request.id);
+        console.log(data);
         return data;
     } catch (error) {
         result.errorMsg = error.response.data.message;

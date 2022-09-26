@@ -1,17 +1,25 @@
 import Image from 'next/image'
 import React from 'react'
 import { FiCheck } from 'react-icons/fi'
+import { useDispatch } from 'react-redux'
 import { convertMoney } from '../pages/profile/add-product'
+import { getDetailOrder } from '../redux/asyncAction/order'
+import ModalOrders from './ModalOrders'
 import ModalStatusOrder from './ModalStatusOrder'
 
 function CardOrder({image, nameProduct, price, qty, status, total, role, idOrder}) {
+  const dispatch = useDispatch()
   const [showModal, setShowModal] = React.useState(false)
   const handleClose = type => {
     setShowModal(false)
   }
+  const onOpen = async () => {
+    await dispatch(getDetailOrder({id: idOrder}))
+    setShowModal(true)
+  }
   return (
     <div className='w-full h-[83px] mb-3'>
-          <div className='w-full h-full grid grid-cols-2'>
+          <div className='w-full h-full grid grid-cols-3'>
             <div className='col-span-1'>
               <div className='w-full h-full grid grid-cols-3'>
                 <div className='h-full w-[69px] relative overflow-hidden'>
@@ -20,7 +28,7 @@ function CardOrder({image, nameProduct, price, qty, status, total, role, idOrder
                 <div className='col-span-1 flex items-center w-full'><p className='text-lg truncate'>{nameProduct}</p></div>
               </div>
             </div>
-            <div className='col-span-1'>
+            <div className='col-span-2'>
               <div className='w-full h-full grid-cols-4 flex flex-row justify-between items-center'>
                 <div className='col-span-1 w-full flex justify-center'>
                   <span className='font-bold text-xl text-black'>{convertMoney(price)}</span>
@@ -29,15 +37,15 @@ function CardOrder({image, nameProduct, price, qty, status, total, role, idOrder
                   <span className='font-normal text-xl text-slate-600'>{qty}</span>
                 </div>
                 <div className='col-span-1 w-full flex justify-center'>
-                  <button onClick={() => setShowModal(true)} className='w-[100px] h-[30px] rounded-lg border-2 border-slate-400 flex justify-center'>
-                    <div className='flex flex-row items-center'>
+                  <button onClick={onOpen} className='w-[100px] h-[30px] rounded-lg border-2 border-slate-400 flex justify-center'>
+                    <div className='flex flex-row justify-center items-center'>
                       <div className='h-[15px] w-[15px] border-2 border-black rounded-full flex justify-center items-center mr-1'>
                         <FiCheck size={10} />
                       </div>
                       <span>{status}</span>
                     </div>
                   </button>
-                  <ModalStatusOrder visible={showModal} onClose={handleClose} role={role} status={status} idOrder={idOrder} />
+                  <ModalOrders visible={showModal} onClose={handleClose} role={role} status={status} idOrder={idOrder} />
                 </div>
                 <div className='col-span-1 w-full flex justify-center'>
                   <span className='font-bold text-xl text-black'>{convertMoney(total)}</span>
