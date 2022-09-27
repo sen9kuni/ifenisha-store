@@ -10,7 +10,7 @@ export default function CardWishFav({image, nameProduct, stock, price, id}) {
 
   // delete from wishlist
   const onDelete = async (value) => {
-    console.log(value);
+    // console.log(value);
     await dispatch(deleteWishFav(value))
     dispatch(getAllWishFav('1'))
   }

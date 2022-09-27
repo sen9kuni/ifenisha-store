@@ -11,29 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import React from 'react';
 import CardOrder from '../components/CardOrder';
 import { getOrderHistory } from '../redux/asyncAction/order';
+import { useRouter } from 'next/router';
 
 export default function Order(){
     const dispacth = useDispatch()
-    const data = [
-        {
-            product_name: 'Fabric Mid Century Chair',
-            price: '10.50',
-            quantity: '5',
-            status: 'Sent',
-        },
-        {
-            product_name: 'Chair in Dark Grey',
-            price: '4.50',
-            quantity: '2',
-            status: 'Processed',
-        },
-        {
-            product_name: 'Dining Side Chair in Beige',
-            price: '765.99',
-            quantity: '7',
-            status: 'Pending',
-        }
-    ];
     const role = useSelector((state) => state.auth.role);
     const idUser = useSelector(state=>state.auth.id);
     const orderResults = useSelector(state=>state.order.results);
@@ -42,16 +23,26 @@ export default function Order(){
     const indexTab = 3;
     const [order, setOrder] = React.useState({active: false, left: 0, top: 0});
     const [product, setProduct] = React.useState({active: false, left: 0, top: 0});
+    // const pagesOrder = [...Array(2)]
+    const router = useRouter();
+    const pagesOrder = [...Array(orderResults?.pageInfo?.pages)]
+
     const menuOrder = (e) => {
         setOrder({active: !order.active, left: e.pageX - 60, top: e.pageY + 30});
     };
     const menuProduct = (e) => {
         setProduct({active: !product.active, left: e.pageX - 60, top: e.pageY + 30});
     };
+
+    const onClickPage = (query) => {
+        router.push(`/order?type=${query.type? query.type:'all'}&page=${query.page}`)
+    };
+
     React.useEffect(() => {
-        dispacth(getOrderHistory({type: 'all', id: idUser, role: 'customer' }))
-    }, [dispacth, idUser])
-    console.log(orderResults);
+        dispacth(getOrderHistory({type: router.query.type == undefined? 'all':router.query.type, id: idUser, role: 'customer', page: router.query.page == undefined? 1:router.query.page}))
+    }, [dispacth, idUser, router.query])
+    // console.log('111', router.query.page);
+
     return(
         <div>
             <Header />
@@ -184,13 +175,46 @@ export default function Order(){
                         </div>
                     </div>
 
+                    <div className='mb-5 flex justify-end gap-3'>
+                        <button onClick={()=> onClickPage({type: 'complate', page: 1})} className={`${router.query.type == 'complate'? 'bg-black':'bg-white'} border border-gray-400 py-2 px-4 rounded-lg`}>
+                            <span className={`${router.query.type == 'complate'? 'text-white':'text-black'}`}>Complate</span>
+                        </button>
+                        <button onClick={()=> onClickPage({type: 'sent', page: 1})} className={`${router.query.type == 'sent'? 'bg-black':'bg-white'} border border-gray-400 py-2 px-4 rounded-lg`}>
+                            <span className={`${router.query.type == 'sent'? 'text-white':'text-black'}`}>Sent</span>
+                        </button>
+                        <button onClick={()=> onClickPage({type: 'paid', page: 1})} className={`${router.query.type == 'paid'? 'bg-black':'bg-white'} border border-gray-400 py-2 px-4 rounded-lg`}>
+                            <span className={`${router.query.type == 'paid'? 'text-white':'text-black'}`}>Paid</span>
+                        </button>
+                        <button onClick={()=> onClickPage({type: 'process', page: 1})} className={`${router.query.type == 'process'? 'bg-black':'bg-white'} border border-gray-400 py-2 px-4 rounded-lg`}>
+                            <span className={`${router.query.type == 'process'? 'text-white':'text-black'}`}>Process</span>
+                        </button>
+                        <button onClick={()=> onClickPage({type: 'cancel', page: 1})} className={`${router.query.type == 'cancel'? 'bg-black':'bg-white'} border border-gray-400 py-2 px-4 rounded-lg`}>
+                            <span className={`${router.query.type == 'cancel'? 'text-white':'text-black'}`}>Cancel</span>
+                        </button>
+                        <button onClick={()=> onClickPage({type: 'all', page: 1})} className={`${router.query.type == 'all' || router.query.type == undefined? 'bg-black':'bg-white'} border border-gray-400 py-2 px-4 rounded-lg`}>
+                            <span className={`${router.query.type == 'all' || router.query.type == undefined? 'text-white':'text-black'}`}>All</span>
+                        </button>
+                    </div>
+
                     {/* <CardOrder nameProduct='aaaaaa' status='paid' price='5000' qty='5' total='500000' role='cutomer' />
                     <CardOrder nameProduct='aaaaaa' status='paid' price='5000' qty='5' total='500000' role='cutomer' />
                     <CardOrder nameProduct='aaaaaa' status='paid' price='5000' qty='5' total='500000' role='cutomer' />
                     <CardOrder nameProduct='aaaaaa' status='sent' price='5000' qty='5' total='500000' role='cutomer' /> */}
-                    {orderResults?.map((e) => {
+                    {orderResults.result?.map((e) => {
                         return <CardOrder key={e.id+e.status_payment} nameProduct={e.cart.products.product_name} image={e.cart.products.product_images.split(',')[0]} status={e.status_payment} qty={e.cart.quantity} role='customer' price={e.cart.products.price} total={e.cart.total_price} idOrder={e.id} />
                     })}
+
+                    <div className='flex justify-center gap-2'>
+                        {
+                            orderResults.result && pagesOrder.map((e, i)=>{
+                                return(
+                                    <button key={i} onClick={()=> onClickPage({type: router.query.type == undefined? 'all':router.query.type, page: i+1})} className={`${orderResults.pageInfo?.currentPage == i+1?'bg-black':'bg-white'} border border-gray-400 py-3 px-4 rounded-lg`}>
+                                        <span className={`${orderResults.pageInfo?.currentPage == i+1?'text-white':'text-black'}`}>{i+1}</span>
+                                    </button>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </main>
             <Footer />

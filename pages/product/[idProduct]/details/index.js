@@ -183,7 +183,6 @@ function ProductDetail(props) {
     const infoWishProduct = useSelector((state=>state.wishFav.infoWishProduct));
     const dataReview = useSelector(state=>state.review.data);
     const successMsgWish = useSelector((state=>state.wishFav.successMsg));
-    console.log(dataReview);
     const onAddWishlist = async () => {
         if (infoWishProduct?.is_deleted === true || infoWishProduct === undefined || infoWishProduct === null) {
             await dispatch(createWishFav({product_id: idProduct, is_favorite: true}))

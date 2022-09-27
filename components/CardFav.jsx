@@ -10,7 +10,7 @@ function CardFav({image, nameProduct, stock, price, id}) {
 
   // delete from wishlist
   const onDelete = async (value) => {
-    console.log(value);
+    // console.log(value);
     await dispatch(updateFav({is_favorite: false, id: value}))
     dispatch(getAllWishFav('1'))
   }
