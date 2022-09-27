@@ -16,6 +16,7 @@ import coupon from './coupon';
 import checkout from './checkout';
 import payment from './payment';
 import order from './order';
+import review from './review';
 
 const authPersistConfig = {
     key:'auth',
@@ -39,6 +40,7 @@ const reducer = combineReducers({
     payment,
     checkout,
     order,
+    review,
 });
 
 export default reducer;

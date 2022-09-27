@@ -7,9 +7,11 @@ export const getReview = createAsyncThunk('/review/showing', async ({idProduct,p
     const pages = page ? page: 1 ;
     try{
         const {data} = await http3().get(`review?productId=${idProduct}&page=${pages}`)
-        console.log(data);
+        results.data = data.result;
+        return results;
     }
     catch(err){
-        console.log(err);
+        results.error = err.response.data.message;
+        return results
     }
 });
