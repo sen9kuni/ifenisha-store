@@ -26,6 +26,7 @@ import { decrement, increment, resetCounter } from '../../../../redux/reducers/c
 import { resetCartMsg } from '../../../../redux/reducers/cart';
 import { createWishFav, deleteWishFav, getInfoWish, recoverWishFav, updateFav } from '../../../../redux/asyncAction/wishFav';
 import { getReview } from '../../../../redux/asyncAction/review';
+import default_image from '../../../../public/images/default.jpg';
 
 export async function getServerSideProps(context){
     const DataCookies = cookies(context)
@@ -180,6 +181,7 @@ function ProductDetail(props) {
     const succesChatmsg = useSelector((state=>state.chats.successmsg));
     const succesCartmsg = useSelector((state=>state.cart.successmsg));
     const infoWishProduct = useSelector((state=>state.wishFav.infoWishProduct));
+    const dataReview = useSelector(state=>state.review.data);
     const successMsgWish = useSelector((state=>state.wishFav.successMsg));
     const onAddWishlist = async () => {
         if (infoWishProduct?.is_deleted === true || infoWishProduct === undefined || infoWishProduct === null) {
@@ -435,61 +437,28 @@ function ProductDetail(props) {
                     </div>
                     <div className='grid grid-cols-5 gap-10'>
                         {tabActive === 0 ? <DetailProductTabContent imgPath={finalImage[0]}/> : <div className='flex flex-col col-start-2 col-end-5 gap-20'>
-                            <div className='flex flex-col items-center'>                                
-                                <div className='flex gap-10 items-center border-b-2 pb-16'>
-                                    <div className='flex justify-start w-1/2'>
-                                        <Image src={ImgProfile} alt='img1' width={150} height={150} objectFit='cover' className='rounded-full'/>
-                                    </div>
-                                    <div className='flex flex-col gap-5'>
-                                        <span>{'“Highly customizable. Excellent design. Customer services has exceeded my expectation. They are quick to answer and even when they don\'t know the answer right away. They\'ll work with you towards a solution.”'}</span>
-                                        <div className='flex gap-5 items-center'>
-                                            <span className='text-xs text-gray-500'>35 mins ago, 15 November 2019</span>
-                                            <span className='text-xs'>Reply</span>
+                            <div className='flex flex-col items-center'> 
+                            {dataReview&&dataReview.map((e,i)=>{
+                                return(
+                                    <>
+                                        <div className='flex gap-10 items-center border-b-2 pb-16'>
+                                            <div className='flex justify-start w-1/2'>
+                                                <Image src={e.users?.profiles[0].image?e.users?.profiles[0].image:default_image} alt='img1' width={150} height={150} objectFit='cover' className='rounded-full'/>
+                                            </div>
+                                            <div className='flex flex-col gap-5'>
+                                                <div className='text-lg'>
+                                                    <span>{e.users?.profiles[0].full_name}</span>
+                                                </div>
+                                                <span>{e.content}</span>
+                                                <div className='flex flex-col gap-5 items-center'>
+                                                    <span className='text-xs text-gray-500'>{e.created_at}</span>
+                                                    <span className='text-xs'>Reply</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className='flex gap-10 items-center border-b-2 pb-16 pt-16'>
-                                    <div className='flex justify-start w-1/2'>
-                                        <Image src={ImgProfile2} alt='img1'width={150} height={150} objectFit='cover' className='rounded-full'/>
-                                    </div>
-                                    <div className='flex flex-col gap-5'>
-                                        <span>{'“Highly customizable. Excellent design. Customer services has exceeded my expectation. They are quick to answer and even when they don\'t know the answer right away. They\'ll work with you towards a solution.”'}</span>
-                                        <div className='flex gap-5 items-center'>
-                                            <span className='text-xs text-gray-500'>35 mins ago, 15 November 2019</span>
-                                            <span className='text-xs'>Reply</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='flex gap-10 items-center border-b-2 pb-16 pt-16'>
-                                    <div className='flex justify-start w-1/2'>
-                                        <Image src={ImgProfile} alt='img1' width={150} height={150} objectFit='cover' className='rounded-full'/>
-                                    </div>
-                                    <div className='flex flex-col gap-5'>
-                                        <span>{'“Highly customizable. Excellent design. Customer services has exceeded my expectation. They are quick to answer and even when they don\'t know the answer right away. They\'ll work with you towards a solution.”'}</span>
-                                        <div className='flex gap-5 items-center'>
-                                            <span className='text-xs text-gray-500'>35 mins ago, 15 November 2019</span>
-                                            <span className='text-xs'>Reply</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className='wrap-review mb-5'>
-                                    <div className='grid grid-cols-3 w-full h-full'>
-                                        <div className='flex justify-center items-center w-full'>
-                                        <div className='w-[150px] h-[150px] rounded-full relative overflow-hidden'>
-                                        <Image src={'https://images.unsplash.com/photo-1518577915332-c2a19f149a75?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80'} objectFit='cover' layout='fill' alt='test' />
-                                        </div>
-                                        {/* <span>aaaa</span> */}
-                                        </div>
-                                        <div className='col-span-2'>
-                                        <div className='flex flex-col justify-center w-full h-full'>
-                                            <span className='mb-4'>“Highly customizable. Excellent design. Customer services has exceeded my expectation. They are quick to answer and even when they don&apos;t know the answer right away. They&apos;ll work with you towards a solution.”</span>
-                                            <span>35 mins ago, 15 November 2019</span>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
+                                    </>
+                                )
+                            })}                             
                             </div>
                             <div className='flex flex-col gap-4'>
                                 <span className='text-4xl'>Leave A Comment</span>
